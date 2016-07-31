@@ -1,6 +1,6 @@
 <?php
 
-namespace PsrLinter;
+namespace Linter;
 
 class LinterTest extends \PHPUnit_Framework_TestCase
 {
