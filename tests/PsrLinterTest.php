@@ -14,4 +14,3 @@ class PsrLinterTest extends \PHPUnit_Framework_TestCase
     }
     
 }
-
