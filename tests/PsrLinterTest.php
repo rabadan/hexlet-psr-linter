@@ -12,5 +12,4 @@ class PsrLinterTest extends \PHPUnit_Framework_TestCase
         $linter = new PsrLinter();
         $this->assertEquals("test", $linter->test());
     }
-    
 }

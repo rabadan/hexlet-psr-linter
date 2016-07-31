@@ -12,5 +12,4 @@ class PsrLinter
     {
         return "test";
     }
-
 }
