@@ -1,11 +1,11 @@
 <?php
 
-namespace Linter;
+namespace PsrLinter;
 
 /**
  * Class Linter
  */
-class Linter
+class PsrLinter
 {
 
     public function test()

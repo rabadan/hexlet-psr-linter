@@ -2,11 +2,11 @@
 
 <?php
 
-namespace Linter;
+namespace PsrLinter;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$liner = new Linter();
+$liner = new PsrLinter();
 
 echo $liner->test();
 
