@@ -5,7 +5,7 @@ namespace PsrLinter;
 /**
  * Class Linter
  */
-class PsrLinter
+class Linter
 {
 
     public function test()

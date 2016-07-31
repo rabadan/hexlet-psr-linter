@@ -2,12 +2,12 @@
 
 namespace PsrLinter;
 
-class PsrLinterTest extends \PHPUnit_Framework_TestCase
+class LinterTest extends \PHPUnit_Framework_TestCase
 {
     
     public function testTest()
     {
-        $linter = new PsrLinter();
+        $linter = new Linter();
         $this->assertEquals("test", $linter->test());
     }
 }
