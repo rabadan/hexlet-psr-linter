@@ -8,5 +8,5 @@ lint:
 	composer exec 'phpcs --standard=PSR2 src tests'
 
 test:
-    composer exec 'phpunit --color tests --coverage-clover build/logs/clover.xml'
-    composer exec 'test-reporter'
+	composer exec phpunit -- -c phpunit.xml
+	composer exec 'test-reporter'
