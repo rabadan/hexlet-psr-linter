@@ -6,4 +6,7 @@ install:
   - composer self-update
   - make install
 
+after_script:
+  - vendor/bin/test-reporter
+
 script: make lint test
