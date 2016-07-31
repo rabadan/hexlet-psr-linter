@@ -5,5 +5,5 @@ namespace PsrLinter;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-
-echo 'Hello!';
+$liner = new PsrLinter();
+echo $liner->test();
