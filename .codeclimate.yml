@@ -1,7 +1,10 @@
----
 engines:
+  duplication:
+    enabled: true
+    config:
+      languages:
+        - php
   fixme:
     enabled: true
-ratings:
-  paths: []
-exclude_paths: []
+  phpmd:
+    enabled: true

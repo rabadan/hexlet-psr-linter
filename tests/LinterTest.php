@@ -4,7 +4,6 @@ namespace PsrLinter;
 
 class LinterTest extends \PHPUnit_Framework_TestCase
 {
-    
     public function testTest()
     {
         $linter = new Linter();

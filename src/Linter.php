@@ -7,7 +7,6 @@ namespace PsrLinter;
  */
 class Linter
 {
-
     public function test()
     {
         return "test";
