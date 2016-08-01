@@ -1,6 +1,6 @@
 <?php
 
-namespace hexletPsrLinter;
+namespace HexletPsrLinter;
 
 function checkFunctionName($name)
 {

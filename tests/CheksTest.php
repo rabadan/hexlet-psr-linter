@@ -1,8 +1,8 @@
 <?php
 
-namespace hexletPsrLinter;
+namespace HexletPsrLinter;
 
-use function hexletPsrLinter\checkFunctionName;
+use function HexletPsrLinter\checkFunctionName;
 
 class CheckersTest extends \PHPUnit_Framework_TestCase
 {

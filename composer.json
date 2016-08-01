@@ -20,7 +20,7 @@
   },
   "autoload": {
     "psr-4": {
-      "hexletPsrLinter\\": "src/"
+      "HexletPsrLinter\\": "src/"
     }
   }
 }
