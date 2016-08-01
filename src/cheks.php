@@ -13,5 +13,4 @@ function checkFunctionName($name)
     }
 
     return true;
-
 }
