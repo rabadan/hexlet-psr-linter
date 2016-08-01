@@ -2,11 +2,9 @@
 
 <?php
 
-namespace PsrLinter;
+namespace hexletPsrLinter;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$liner = new Linter();
-
-echo $liner->test();
+echo "test";
 
