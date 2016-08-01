@@ -2,10 +2,6 @@ language: php
 php:
   - '7.0'
 
-addons:
-    code_climate:
-        repo_token: ed55d15b5fe0950b535003f0aaece251df35b058a0521617fa6fc2c4b49aad8e
-
 install:
   - composer self-update
   - make install
