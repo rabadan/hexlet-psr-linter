@@ -6,19 +6,19 @@ namespace HexletPsrLinter;
 class Rules
 {
     private $magicMethod = [
-        "__construct", 
-        "__destruct", 
-        "__call", 
-        "__callStatic", 
-        "__get", 
-        "__set", 
-        "__isset", 
-        "__unset", 
-        "__sleep", 
-        "__wakeup", 
-        "__toString", 
-        "__invoke", 
-        "__set_state", 
+        "__construct",
+        "__destruct",
+        "__call",
+        "__callStatic",
+        "__get",
+        "__set",
+        "__isset",
+        "__unset",
+        "__sleep",
+        "__wakeup",
+        "__toString",
+        "__invoke",
+        "__set_state",
         "__clone",
         "__debugInfo"
     ];
@@ -29,5 +29,5 @@ class Rules
             return true;
         }
         return \PHP_CodeSniffer::isCamelCaps($name, false, true, true);
-    } 
+    }
 }

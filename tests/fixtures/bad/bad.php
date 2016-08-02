@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 echo "Сorrect function names";
 
@@ -19,4 +19,3 @@ function bad_bad_name($water)
 {
 	return $water;
 }
-

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace HexletPsrLinter;
 
@@ -16,11 +16,11 @@ class LinterNodeVisitor extends NodeVisitorAbstract
         $this->rules = $rules;
     }
 
-    public function leaveNode(Node $node) {
-         
+    public function leaveNode(Node $node)
+    {
         if ($node instanceof Stmt\Function_) {
             if (!$this->rules->validateFunctionName($node->name)) {
-                $this->errors[]= "{$node->name} - not valid name ";
+                $this->errors[]= "{$node->name} - not valid name";
             };
         }
         
