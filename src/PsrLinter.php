@@ -27,11 +27,7 @@ class PsrLinter
 
                     $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
                     $traverser = new NodeTraverser;
-
-
                     $visitor = new LinterNodeVisitor(new Rules());
-
-                    // add your visitor
                     $traverser->addVisitor($visitor);
 
                     try {
@@ -44,16 +40,14 @@ class PsrLinter
                         if (count($visitor->errors)) {
                             $errors[$file] = $visitor->errors;
                         }
-
                     } catch (\PhpParser\Error $e) {
                         echo 'Parse Error: ', $e->getMessage();
                     }
-
                 } else {
                     $this->cli->error("Error load file from: {$cmd['path']}");
                 }
             } else {
-                $this->cli->error("Error path: {$cmd['path']}");;
+                $this->cli->error("Error path: {$cmd['path']}");
             }
         }
 

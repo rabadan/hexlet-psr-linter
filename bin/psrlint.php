@@ -15,11 +15,10 @@ $cmd->option()
     ->aka('path')
     ->require()
     ->describedAs('File path');
- 
-if (file_exists($cmd['path'])) {
 
-	$linter = new PsrLinter();
-	$result = $linter->lint($cmd);
+if (file_exists($cmd['path'])) {
+    $linter = new PsrLinter();
+    $result = $linter->lint($cmd);
 
     if (count($result)) {
         foreach ($result as $file => $errors) {
@@ -31,4 +30,4 @@ if (file_exists($cmd['path'])) {
     }
 } else {
     echo $color('ERROR: File or directory on this path can not be found')->bg('red')->bold()->white() . PHP_EOL;
-}	
+}

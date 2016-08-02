@@ -25,7 +25,7 @@ class Rules
 
     public function validateFunctionName($name)
     {
-        if (in_array($name,$this->magicMethod)) {
+        if (in_array($name, $this->magicMethod)) {
             return true;
         }
         return \PHP_CodeSniffer::isCamelCaps($name, false, true, true);
