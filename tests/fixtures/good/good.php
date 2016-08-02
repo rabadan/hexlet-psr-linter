@@ -1,7 +1,5 @@
 <?php
 
-echo "Сorrect function names";
-
 function name()
 {
     return "Good!";
