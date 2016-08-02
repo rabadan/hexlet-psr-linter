@@ -24,7 +24,6 @@ class PsrLinter
             if (file_exists($file) && is_file($file)) {
                 $codeFile = file_get_contents($file);
                 if ($codeFile !== false) {
-
                     $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
                     $traverser = new NodeTraverser;
                     $visitor = new LinterNodeVisitor(new Rules());

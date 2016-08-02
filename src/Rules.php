@@ -1,7 +1,8 @@
 <?php
+
 namespace HexletPsrLinter;
 /**
- * Class Rules 
+ * Class Rules
  */
 class Rules
 {
