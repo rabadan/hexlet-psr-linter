@@ -1,14 +1,9 @@
 <?php
 
-echo "Сorrect function names";
-
-
 function Name()
 {
     return "Bad!";
 }
-
-$water = "Всякая вода, чтоб в файле было еще что то, кроме функций";
 
 function NameGood()
 {
