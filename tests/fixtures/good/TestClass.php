@@ -1,5 +1,7 @@
 <?php
 
+namespace TestLinter;
+
 class TestClass
 {
     public function isCase()

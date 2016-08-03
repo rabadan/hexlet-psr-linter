@@ -9,7 +9,7 @@ class LinterTest extends \PHPUnit_Framework_TestCase
 
         $linter = new Linter();
         $result = $linter->run(["path"=>__DIR__."/fixtures/good"]);
-        $this->assertEquals($result,[
+        $this->assertEquals($result, [
             __DIR__."/fixtures/good/TestClass.php"=>[],
             __DIR__."/fixtures/good/good.php"=>[],
         ]);
@@ -18,7 +18,7 @@ class LinterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             $result,
             [
-                __DIR__."/fixtures/bad/TestClass.php"=>[
+                __DIR__."/fixtures/bad/TestClass.php_test"=>[
                     0 => [5,"IsCase"],
                     1 => [10,"Camel"],
                     2 => [15,"camel_case"],
@@ -46,7 +46,7 @@ class LinterTest extends \PHPUnit_Framework_TestCase
         } ";
 
 
-        $this->assertEquals($linter->lint($codeGood),[]);
+        $this->assertEquals($linter->lint($codeGood), []);
 
         $codeGood = "<?php 
         function BadName() {
@@ -57,7 +57,7 @@ class LinterTest extends \PHPUnit_Framework_TestCase
         } ";
 
         $linter = new Linter();
-        $this->assertEquals($linter->lint($codeGood),[
+        $this->assertEquals($linter->lint($codeGood), [
             0  => [2,"BadName"],
             1  => [4,"bad_name"],
             2  => [6,"BadNameName"],
