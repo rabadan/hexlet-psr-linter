@@ -6,7 +6,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use Commando\Command;
 use Colors\Color;
-use HexletPsrLinter\PsrLinter;
+use HexletPsrLinter\Linter;
 
 $color = new Color();
 
@@ -17,17 +17,20 @@ $cmd->option()
     ->describedAs('File path');
 
 if (file_exists($cmd['path'])) {
-    $linter = new PsrLinter();
-    $result = $linter->lint($cmd);
+    $linter = new Linter();
+    $result = $linter->run($cmd);
 
     if (count($result)) {
         foreach ($result as $file => $errors) {
+            if (count($errors)==0) continue;
             echo $color($file . " - " . count($errors) . " errors")->bold().PHP_EOL;
             foreach ($errors as $error) {
-                echo $color($error)->red().PHP_EOL;
+                echo $color(is_array($error)?implode(":",$error):$error)->red().PHP_EOL;
             }
+//            require('/home/rabadan/.composer/vendor/psy/psysh/bin/psysh');
+//            eval(\Psy\sh());
         }
     }
 } else {
-    echo $color('ERROR: File or directory on this path can not be found')->bg('red')->bold()->white() . PHP_EOL;
+    echo $color('ERROR: File or directory on this path can not be found')->bold()->red() . PHP_EOL;
 }
