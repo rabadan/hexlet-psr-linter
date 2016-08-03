@@ -35,9 +35,8 @@ class NodeVisitor extends NodeVisitorAbstract
     {
         foreach ($this->checks as $check) {
             if ($check->isCheck($node)) {
-                $validateErrors = $check->validate($node);
-                if (!empty($validateErrors)) {
-                    $this->errors[] = $validateErrors;
+                if (!$check->validate($node)) {
+                    $this->errors[] = $check->getErrors();
                 };
             }
         }

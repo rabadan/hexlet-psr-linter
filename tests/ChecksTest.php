@@ -8,48 +8,70 @@ use PhpParser\Node\Stmt;
 
 class ChecksTest extends \PHPUnit_Framework_TestCase
 {
-    public function testCheckMethodName()
+    public function testCheckMethodNameValid()
     {
         $testMethods = [
-            'camelCase'         => [],
-            'camelcase'         => [],
-            'camelCamelCamel'   => [],
-            '__construct'       => [],
-            '__set'             => [],
-            'CamelCase'         => [-1,'CamelCase'],
-            'Camelcase'         => [-1,'Camelcase'],
-            'camel_case'        => [-1,'camel_case'],
-            '__camelcase'       => [-1,'__camelcase'],
+            'camelCase',
+            'camelcase',
+            'camelCamelCamel',
+            '__construct',
+            '__set',
         ];
 
         $check = new MethodCheck();
 
-        foreach ($testMethods as $key => $val) {
-            $this->assertEquals($check->validate(new Stmt\ClassMethod($key)), $val);
+        foreach ($testMethods as $val) {
+            $this->assertTrue($check->validate(new Stmt\ClassMethod($val)));
         }
     }
 
-    public function testCheckFunctionName()
+    public function testCheckMethodNameInvalid()
     {
-        $testFunctions = [
-            'camelCase'         => [],
-            'camelcase'         => [],
-            'camelCamelCamel'   => [],
-            '__construct'       => [-1,'__construct'],
-            '__set'             => [-1,'__set'],
-            'CamelCase'         => [-1,'CamelCase'],
-            'Camelcase'         => [-1,'Camelcase'],
-            'camel_case'        => [-1,'camel_case'],
-            '__camelcase'       => [-1,'__camelcase'],
+        $testMethods = [
+            'CamelCase',
+            'Camelcase',
+            'camel_case',
+            '__camelcase'
         ];
 
+        $check = new MethodCheck();
 
+        foreach ($testMethods as $val) {
+            $this->assertFalse($check->validate(new Stmt\ClassMethod($val)));
+        }
+    }
+
+    public function testCheckFunctionNameValid()
+    {
+        $testFunctions = [
+            'camelCase',
+            'camelcase',
+            'camelCamelCamel'
+        ];
 
         $check = new FunctionCheck();
 
-        foreach ($testFunctions as $key => $val) {
-            $val = $check->validate(new Stmt\Function_($key));
-            $this->assertEquals($check->validate(new Stmt\Function_($key)), $val);
+        foreach ($testFunctions as $val) {
+            $this->assertTrue($check->validate(new Stmt\Function_($val)));
+        }
+    }
+
+
+    public function testCheckFunctionNameInvalid()
+    {
+        $testFunctions = [
+            '__construct',
+            '__set',
+            'CamelCase',
+            'Camelcase',
+            'camel_case',
+            '__camelcase'
+        ];
+
+        $check = new FunctionCheck();
+
+        foreach ($testFunctions as $val) {
+            $this->assertFalse($check->validate(new Stmt\Function_($val)));
         }
     }
 }

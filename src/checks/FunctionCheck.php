@@ -18,7 +18,13 @@ class FunctionCheck implements CheckInterface
                 $node->getLine(),
                 $node->name
             ];
+            return false;
         }
+        return true;
+    }
+
+    public function getErrors()
+    {
         return $this->errors;
     }
 }
