@@ -21,6 +21,6 @@ class TestClass
 
     public function __bad()
     {
-
+        return 1;
     }
 }

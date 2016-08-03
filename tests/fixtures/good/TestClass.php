@@ -16,11 +16,11 @@ class TestClass
 
     public function __construct()
     {
-
+        return 1;
     }
 
     public function __destruct()
     {
-
+        return 1;
     }
 }

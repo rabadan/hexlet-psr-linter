@@ -62,7 +62,5 @@ class LinterTest extends \PHPUnit_Framework_TestCase
             1  => [4,"bad_name"],
             2  => [6,"BadNameName"],
         ]);
-
-
     }
 }
