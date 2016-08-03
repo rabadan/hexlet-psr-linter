@@ -16,12 +16,7 @@ class Linter
         $errors = [];
 
         foreach ($files as $file) {
-            $loadFile = getFile($file);
-            if (!empty($loadFile['errors'])) {
-                $errors[$file] = $loadFile['errors'];
-                continue;
-            }
-            $errors[$file] = $this->lint($loadFile['code']);
+            $errors[$file] = $this->lint(getFile($file));
         }
 
         return $errors;

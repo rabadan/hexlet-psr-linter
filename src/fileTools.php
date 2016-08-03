@@ -2,8 +2,14 @@
 
 namespace HexletPsrLinter;
 
+use HexletPsrLinter\Exceptions\LoadFileException;
+use HexletPsrLinter\Exceptions\FileExistsException;
+
 function getFilesPath($path)
 {
+    if (!file_exists($path)) {
+        throw new FileExistsException("File or directory on this path can not be found: {$path}");
+    }
     $files = [];
 
     if (is_dir($path)) {
@@ -20,29 +26,24 @@ function getFilesPath($path)
                 $files[] = $item->getPathName();
             }
         }
-    } else {
-        $files[] = $path;
+
+        return $files;
     }
 
+    $files[] = $path;
     return $files;
 }
 
 function getFile($path)
 {
-    $result = [
-        'code'   => null,
-        'errors' => [],
-    ];
-
     if (!file_exists($path) || !is_file($path)) {
-        $result['errors'] = "File not found at the path: {$path}";
-        return $result;
+        throw new FileExistsException("File not found at the path: {$path}");
     }
 
-    $result['code'] = file_get_contents($path);
-    if ($result['code'] === false) {
-        $result['errors'] = "Error load file from: {$path}";
+    $code = file_get_contents($path);
+    if ($code === false) {
+        throw new LoadFileException("Error load file from: {$path}");
     }
 
-    return $result;
+    return $code;
 }

@@ -16,21 +16,19 @@ $cmd->option()
     ->require()
     ->describedAs('File path');
 
-if (file_exists($cmd['path'])) {
-    $linter = new Linter();
-    $result = $linter->run($cmd);
 
-    if (count($result)) {
-        foreach ($result as $file => $errors) {
-            if (count($errors)==0) continue;
-            echo $color($file . " - " . count($errors) . " errors")->bold().PHP_EOL;
-            foreach ($errors as $error) {
-                echo $color(is_array($error)?implode(":",$error):$error)->red().PHP_EOL;
-            }
-//            require('/home/rabadan/.composer/vendor/psy/psysh/bin/psysh');
-//            eval(\Psy\sh());
+$linter = new Linter();
+$result = $linter->run($cmd);
+
+if (count($result)) {
+    foreach ($result as $file => $errors) {
+        if (count($errors)==0) continue;
+        echo $color($file . " - " . count($errors) . " errors")->bold().PHP_EOL;
+        foreach ($errors as $error) {
+            echo $color(is_array($error)?implode(":",$error):$error)->red().PHP_EOL;
         }
     }
-} else {
-    echo $color('ERROR: File or directory on this path can not be found')->bold()->red() . PHP_EOL;
+    exit(1);
 }
+
+exit(0);
