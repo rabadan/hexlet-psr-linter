@@ -18,12 +18,6 @@ class LinterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(
             $result,
             [
-                __DIR__."/fixtures/bad/TestClass.php_test"=>[
-                    0 => [5,"IsCase"],
-                    1 => [10,"Camel"],
-                    2 => [15,"camel_case"],
-                    3 => [20,"__bad"],
-                ],
                 __DIR__."/fixtures/bad/bad.php"=>[
                     0  => [3,"Name"],
                     1  => [8,"NameGood"],
