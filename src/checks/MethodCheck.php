@@ -2,9 +2,22 @@
 
 namespace HexletPsrLinter\checks;
 
+use PhpParser\Node;
+
 class MethodCheck implements CheckInterface
 {
     private $errors = [];
+    private $nodeType;
+    private $regex;
+    private $comment;
+
+    public function __construct($nodeType = 'Stmt_ClassMethod', $regex = '^[a-z]+([A-Z]?[a-z]+)+$', $comment = "")
+    {
+        $this->nodeType = $nodeType;
+        $this->regex    = $regex;
+        $this->comment  = $comment;
+    }
+
     private $magicMethod = [
         "__construct",
         "__destruct",
@@ -23,22 +36,25 @@ class MethodCheck implements CheckInterface
         "__debugInfo"
     ];
 
-    public function isCheck($node)
+    public function validate(Node $node)
     {
-        return $node->getType() === 'Stmt_ClassMethod';
-    }
-
-    public function validate($node)
-    {
-        if (!in_array($node->name, $this->magicMethod) &&
-            !\PHP_CodeSniffer::isCamelCaps($node->name, false, true, true)) {
-            $this->errors = [
-                $node->getLine(),
-                $node->name
-            ];
-            return false;
+        if (!in_array($node->name, $this->magicMethod)) {
+            $result = preg_match_all("/{$this->regex}/", $node->name);
+            if ($result == 0) {
+                $this->errors = [
+                    $node->getLine(),
+                    $node->name,
+                    $this->comment
+                ];
+                return false;
+            }
         }
         return true;
+    }
+
+    public function isCheck(Node $node)
+    {
+        return $node->getType() === $this->nodeType;
     }
 
     public function getErrors()

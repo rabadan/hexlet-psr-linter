@@ -4,13 +4,14 @@ namespace HexletPsrLinter;
 
 use HexletPsrLinter\checks\FunctionCheck;
 use HexletPsrLinter\checks\MethodCheck;
+use HexletPsrLinter\checks\RegexCheck;
 use PhpParser\Node\Stmt;
 
 class ChecksTest extends \PHPUnit_Framework_TestCase
 {
     public function testCheckMethodNameValid()
     {
-        $testMethods = [
+        $validDate = [
             'camelCase',
             'camelcase',
             'camelCamelCamel',
@@ -18,16 +19,7 @@ class ChecksTest extends \PHPUnit_Framework_TestCase
             '__set',
         ];
 
-        $check = new MethodCheck();
-
-        foreach ($testMethods as $val) {
-            $this->assertTrue($check->validate(new Stmt\ClassMethod($val)));
-        }
-    }
-
-    public function testCheckMethodNameInvalid()
-    {
-        $testMethods = [
+        $invalidData = [
             'CamelCase',
             'Camelcase',
             'camel_case',
@@ -36,30 +28,24 @@ class ChecksTest extends \PHPUnit_Framework_TestCase
 
         $check = new MethodCheck();
 
-        foreach ($testMethods as $val) {
+        foreach ($validDate as $val) {
+            $this->assertTrue($check->validate(new Stmt\ClassMethod($val)));
+        }
+
+        foreach ($invalidData as $val) {
             $this->assertFalse($check->validate(new Stmt\ClassMethod($val)));
         }
     }
 
-    public function testCheckFunctionNameValid()
+    public function testCheckRegexName()
     {
-        $testFunctions = [
+        $validDate = [
             'camelCase',
             'camelcase',
             'camelCamelCamel'
         ];
 
-        $check = new FunctionCheck();
-
-        foreach ($testFunctions as $val) {
-            $this->assertTrue($check->validate(new Stmt\Function_($val)));
-        }
-    }
-
-
-    public function testCheckFunctionNameInvalid()
-    {
-        $testFunctions = [
+        $invalidData = [
             '__construct',
             '__set',
             'CamelCase',
@@ -68,9 +54,13 @@ class ChecksTest extends \PHPUnit_Framework_TestCase
             '__camelcase'
         ];
 
-        $check = new FunctionCheck();
+        $check = new RegexCheck('Stmt_Function', '^[a-z]+([A-Z]?[a-z]+)+$', 'No camel case function name');
 
-        foreach ($testFunctions as $val) {
+        foreach ($validDate as $val) {
+            $this->assertTrue($check->validate(new Stmt\Function_($val)));
+        }
+
+        foreach ($invalidData as $val) {
             $this->assertFalse($check->validate(new Stmt\Function_($val)));
         }
     }

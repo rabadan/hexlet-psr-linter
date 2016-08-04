@@ -15,16 +15,13 @@ class LinterTest extends \PHPUnit_Framework_TestCase
         ]);
 
         $result = $linter->run(["path"=>__DIR__."/fixtures/bad"]);
-        $this->assertEquals(
-            $result,
-            [
-                __DIR__."/fixtures/bad/bad.php"=>[
-                    0  => [3,"Name"],
-                    1  => [8,"NameGood"],
-                    2  => [13,"bad_bad_name"],
-                ],
-            ]
-        );
+        $this->assertArrayHasKey(__DIR__."/fixtures/bad/bad.php", $result);
+        $this->assertContains(3, $result[__DIR__."/fixtures/bad/bad.php"][0]);
+        $this->assertContains("Name", $result[__DIR__."/fixtures/bad/bad.php"][0]);
+        $this->assertContains(8, $result[__DIR__."/fixtures/bad/bad.php"][1]);
+        $this->assertContains("NameGood", $result[__DIR__."/fixtures/bad/bad.php"][1]);
+        $this->assertContains(13, $result[__DIR__."/fixtures/bad/bad.php"][2]);
+        $this->assertContains("bad_bad_name", $result[__DIR__."/fixtures/bad/bad.php"][2]);
     }
 
     public function testLint()
@@ -39,7 +36,6 @@ class LinterTest extends \PHPUnit_Framework_TestCase
         function goodNameName() {
         } ";
 
-
         $this->assertEquals($linter->lint($codeGood), []);
 
         $codeGood = "<?php 
@@ -51,10 +47,12 @@ class LinterTest extends \PHPUnit_Framework_TestCase
         } ";
 
         $linter = new Linter();
-        $this->assertEquals($linter->lint($codeGood), [
-            0  => [2,"BadName"],
-            1  => [4,"bad_name"],
-            2  => [6,"BadNameName"],
-        ]);
+        $result = $linter->lint($codeGood);
+        $this->assertContains(2, $result[0]);
+        $this->assertContains("BadName", $result[0]);
+        $this->assertContains(4, $result[1]);
+        $this->assertContains("bad_name", $result[1]);
+        $this->assertContains(6, $result[2]);
+        $this->assertContains("BadNameName", $result[2]);
     }
 }
