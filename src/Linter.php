@@ -32,8 +32,7 @@ class Linter
         $traverser = new NodeTraverser;
         $visitor = new NodeVisitor([
             new MethodCheck,
-            new RegexCheck('Stmt_Function', '^[a-z]+([A-Z]?[a-z]+)+$', 'No camel case function name'),
-            new RegexCheck('Stmt_Function', '^[a-z]+([A-Z]?[a-z]+)+$', 'No camel case function name'),
+            new RegexCheck('Stmt_Function', '^[a-z]+([A-Z]?[a-z]+)+$', 'No camel case function name')
         ]);
         $traverser->addVisitor($visitor);
 
