@@ -9,16 +9,11 @@ class LinterTest extends \PHPUnit_Framework_TestCase
 
         $linter = new Linter();
         $result = $linter->run(["path"=>__DIR__."/fixtures/good"]);
-        $this->assertEquals($result, [
-            __DIR__."/fixtures/good/TestClass.php"=>[],
-            __DIR__."/fixtures/good/good.php"=>[],
-        ]);
+        $this->assertEquals($result, 0);
 
         $result = $linter->run(["path"=>__DIR__."/fixtures/bad/bad.php"]);
 
-        $this->assertNotEquals($result, [
-            __DIR__."/fixtures/bad/bad.php"=>[],
-        ]);
+        $this->assertNotEquals($result, 0);
     }
 
     public function testLint()

@@ -2,32 +2,43 @@
 
 namespace HexletPsrLinter;
 
-use HexletPsrLinter\checks\FunctionCheck;
-use HexletPsrLinter\checks\MethodCheck;
-use HexletPsrLinter\checks\RegexCheck;
+use Colors\Color;
+use HexletPsrLinter\Checks\MethodCheck;
+use HexletPsrLinter\Checks\RegexCheck;
+use HexletPsrLinter\Report\Message;
+use HexletPsrLinter\Report\Report;
 use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
 
 class Linter
 {
 
-    public function run($cmd)
+    public function run($cmd, $printReport = false)
     {
+        $resultCode = 0;
+
+
         $files = getFilesPath($cmd['path']);
-        $errors = [];
+        $report = new Report();
 
         foreach ($files as $file) {
-            $errors[$file] = $this->lint(getFile($file));
+            $error = $this->lint(getFileContent($file));
+            if (!empty($error)) {
+                $report->addLogs($file, $error);
+                $resultCode = 1;
+            }
         }
 
-        return $errors;
+        if ($resultCode && $printReport) {
+            $report->createReport($cmd['format']);
+        }
+
+        return $resultCode;
     }
 
 
     public function lint($codeFile)
     {
-        $error = [];
-
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         $traverser = new NodeTraverser;
         $visitor = new NodeVisitor([
@@ -43,11 +54,9 @@ class Linter
             // traverse
             $traverser->traverse($stmts);
 
-            if (!empty($visitor->getErrors())) {
-                $error = $visitor->getErrors();
-            }
+            $error = $visitor->getErrors();
         } catch (\PhpParser\Error $e) {
-            $error = "Parse Error: ". $e->getMessage();
+            $error = [new Message(0, Report::LOG_LEVEL_ERROR, "(Parse Error)", $e->getMessage())];
         }
 
         return $error;

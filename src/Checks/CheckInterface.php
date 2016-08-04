@@ -1,12 +1,12 @@
 <?php
 
-namespace HexletPsrLinter\checks;
+namespace HexletPsrLinter\Checks;
 
 use PhpParser\Node;
 
 interface CheckInterface
 {
-    public function isCheck(Node $node);
+    public function isAcceptable(Node $node);
     public function validate(Node $node);
     public function getErrors();
 }

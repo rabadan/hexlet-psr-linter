@@ -34,7 +34,7 @@ class NodeVisitor extends NodeVisitorAbstract
     public function leaveNode(Node $node)
     {
         foreach ($this->checks as $check) {
-            if ($check->isCheck($node)) {
+            if ($check->isAcceptable($node)) {
                 if (!$check->validate($node)) {
                     $this->errors[] = $check->getErrors();
                 };

@@ -1,6 +1,6 @@
 <?php
 
-namespace HexletPsrLinter\checks;
+namespace HexletPsrLinter\Checks;
 
 use PhpParser\Node;
 
@@ -52,7 +52,7 @@ class MethodCheck implements CheckInterface
         return true;
     }
 
-    public function isCheck(Node $node)
+    public function isAcceptable(Node $node)
     {
         return $node->getType() === $this->nodeType;
     }

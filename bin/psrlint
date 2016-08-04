@@ -5,10 +5,7 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Commando\Command;
-use Colors\Color;
 use HexletPsrLinter\Linter;
-
-$color = new Color();
 
 $cmd = new Command();
 $cmd->option()
@@ -16,19 +13,13 @@ $cmd->option()
     ->require()
     ->describedAs('File path');
 
+$cmd->option('format')
+    ->aka('f')
+    ->description('Report file format [options: txt, json, yml] [default: txt]')
+    ->must(function ($format) {
+        return in_array($format, ['txt', 'json', 'yml']);
+    })
+    ->default('txt');
 
 $linter = new Linter();
-$result = $linter->run($cmd);
-
-if (count($result)) {
-    foreach ($result as $file => $errors) {
-        if (count($errors)==0) continue;
-        echo $color($file . " - " . count($errors) . " errors")->bold().PHP_EOL;
-        foreach ($errors as $error) {
-            echo $color(is_array($error)?implode(":",$error):$error)->red().PHP_EOL;
-        }
-    }
-    exit(1);
-}
-
-exit(0);
+exit($linter->run($cmd,true));

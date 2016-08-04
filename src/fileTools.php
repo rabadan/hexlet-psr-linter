@@ -34,7 +34,7 @@ function getFilesPath($path)
     return $files;
 }
 
-function getFile($path)
+function getFileContent($path)
 {
     if (!file_exists($path) || !is_file($path)) {
         throw new FileExistsException("File not found at the path: {$path}");

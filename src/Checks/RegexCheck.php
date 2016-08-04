@@ -1,7 +1,9 @@
 <?php
 
-namespace HexletPsrLinter\checks;
+namespace HexletPsrLinter\Checks;
 
+use HexletPsrLinter\Report\Message;
+use HexletPsrLinter\Report\Report;
 use PhpParser\Node;
 
 class RegexCheck implements CheckInterface
@@ -18,7 +20,7 @@ class RegexCheck implements CheckInterface
         $this->comment  = $comment;
     }
 
-    public function isCheck(Node $node)
+    public function isAcceptable(Node $node)
     {
         return $node->getType() === $this->nodeType;
     }
@@ -27,11 +29,12 @@ class RegexCheck implements CheckInterface
     {
         $result = preg_match_all("/{$this->regex}/", $node->name);
         if ($result == 0) {
-            $this->errors = [
+            $this->errors = new Message(
                 $node->getLine(),
+                Report::LOG_LEVEL_ERROR,
                 $node->name,
                 $this->comment
-            ];
+            );
             return false;
         }
         return true;

@@ -2,9 +2,8 @@
 
 namespace HexletPsrLinter;
 
-use HexletPsrLinter\checks\FunctionCheck;
-use HexletPsrLinter\checks\MethodCheck;
-use HexletPsrLinter\checks\RegexCheck;
+use HexletPsrLinter\Checks\MethodCheck;
+use HexletPsrLinter\Checks\RegexCheck;
 use PhpParser\Node\Stmt;
 
 class ChecksTest extends \PHPUnit_Framework_TestCase
