@@ -28,8 +28,7 @@
       "HexletPsrLinter\\": "src/"
     },
     "files": [
-      "src/fileTools.php",
-      "src/linter.php"
+      "src/fileTools.php"
     ]
   }
 }
