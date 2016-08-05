@@ -11,40 +11,6 @@ use PhpParser\ParserFactory;
 
 class Linter
 {
-    private $report;
-
-    public function __construct()
-    {
-        $this->report = new Report();
-    }
-
-    /**
-     * @return Report
-     */
-    public function getReport(): Report
-    {
-        return $this->report;
-    }
-
-
-    public function run($cmd)
-    {
-        $resultCode = 0;
-
-        $files = getFilesPath($cmd['path']);
-
-        foreach ($files as $file) {
-            $error = $this->lint(getFileContent($file));
-            if (!empty($error)) {
-                $this->report->addLogs($file, $error);
-                $resultCode = 1;
-            }
-        }
-
-        return $resultCode;
-    }
-
-
     public function lint($codeFile)
     {
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
@@ -53,9 +19,17 @@ class Linter
             new MethodCheck,
             new RegexCheck('Stmt_Function', '^[a-z]+([A-Z]?[a-z]+)+$', 'No camel case function name')
         ]);
+
         $traverser->addVisitor($visitor);
-        $stmts = $parser->parse($codeFile);
-        $traverser->traverse($stmts);
-        return $visitor->getErrors();
+
+        try {
+            $stmts = $parser->parse($codeFile);
+            $traverser->traverse($stmts);
+            $errors = $visitor->getErrors();
+        } catch (\PhpParser\Error $e) {
+            $errors[] = new Message(0, Report::LOG_LEVEL_ERROR, "(Parse Error)", $e->getMessage());
+        } finally {
+            return $errors;
+        }
     }
 }

@@ -5,6 +5,7 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Commando\Command;
+use HexletPsrLinter\FileLinter;
 use HexletPsrLinter\Linter;
 
 $cmd = new Command();
@@ -21,11 +22,16 @@ $cmd->option('format')
     })
     ->default('txt');
 
-$linter = new Linter();
-$exitCode = $linter->run($cmd);
 
-if ($exitCode) {
-    $linter->getReport()->createReport($cmd['format']);
+
+$exitCode = 0;
+
+$fileLinter = new FileLinter(new Linter());
+$report = $fileLinter->lint($cmd['path']);
+
+if (!$report->isEmpty()) {
+    $exitCode = 1;
+    $report->createReport($cmd['format']);
 }
 
 exit($exitCode);

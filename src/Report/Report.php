@@ -52,6 +52,11 @@ class Report
         return $this->logs;
     }
 
+    public function isEmpty()
+    {
+        return empty($this->logs);
+    }
+
     /**
      * @param $format string
      * @return mixed
