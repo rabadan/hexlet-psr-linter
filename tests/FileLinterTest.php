@@ -9,7 +9,7 @@ class FileLinterTest extends \PHPUnit_Framework_TestCase
 {
     public function testLinterRunGood()
     {
-        $report = new Report();
+        $report = new Report('txt');
         $linter = new FileLinter(new Linter(), $report);
         $result = $linter->lint(__DIR__."/fixtures/good");
         $this->assertEquals($result->getLogs(), []);
@@ -17,7 +17,7 @@ class FileLinterTest extends \PHPUnit_Framework_TestCase
 
     public function testLinterRunBad()
     {
-        $report = new Report();
+        $report = new Report('txt');
         $linter = new FileLinter(new Linter(), $report);
         $result = $linter->lint(__DIR__."/fixtures/bad/bad.php");
         $this->assertNotEquals($result->getLogs(), []);

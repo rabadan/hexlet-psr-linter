@@ -15,7 +15,7 @@ class FileLinter
     private $linter;
     private $report;
 
-    public function __construct(Linter $linter, ReportInterface $report)
+    public function __construct(Linter $linter, $report)
     {
         $this->linter = $linter;
         $this->report = $report;

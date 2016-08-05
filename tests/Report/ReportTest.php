@@ -19,30 +19,41 @@ class ReportTest extends \PHPUnit_Framework_TestCase
 
     public function testEmpty()
     {
-        $report = new Report();
+        $report = new Report('txt');
         $this->assertTrue($report->isEmpty());
         $report->addLog('test.php', $this->message);
         $this->assertFalse($report->isEmpty());
     }
 
-    public function testReport()
+    public function testLogs()
     {
-        $report = new Report();
+        $report = new Report('txt');
         $report->addLog('test.php', $this->message);
         $this->assertEquals($report->getLogs(), ['test.php'=>[$this->message]]);
     }
 
+    public function testReportTxt()
+    {
+        $report = new Report('txt');
+        $report->addLog('test.php', $this->message);
+        $val = "file: test.php" .
+            PHP_EOL .
+            "1    error     test                     message                                                     " .
+            PHP_EOL;
+        $this->assertEquals($val, $report->printFormat());
+    }
+
     public function testReportYaml()
     {
-        $report = new ReportYaml();
+        $report = new Report('yml');
         $report->addLog('test.php', $this->message);
-        $this->assertEquals(Yaml::dump($report->getLogs()), $report->createReport());
+        $this->assertEquals(Yaml::dump($report->getLogs()), $report->printFormat());
     }
 
     public function testReportJson()
     {
-        $report = new ReportJson();
+        $report = new Report('json');
         $report->addLog('test.php', $this->message);
-        $this->assertEquals(json_encode($report->getLogs()), $report->createReport());
+        $this->assertEquals(json_encode($report->getLogs()), $report->printFormat());
     }
 }

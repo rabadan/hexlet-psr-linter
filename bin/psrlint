@@ -30,16 +30,7 @@ $cmd->option('format')
 $exitCode = 0;
 
 $linter = new Linter();
-switch ($cmd['format']) {
-    case "yml":
-        $report = new ReportYaml();
-        break;
-    case "json":
-        $report = new ReportJson();
-        break;
-    default:
-        $report = new Report();
-}
+$report = new Report($cmd['format']);
 $fileLinter = new FileLinter($linter, $report);
 $report = $fileLinter->lint($cmd['path']);
 

@@ -10,13 +10,13 @@ use Symfony\Component\Yaml\Yaml;
  * @property $cli CLImate
 */
 
-class ReportYaml extends Report implements ReportInterface
+class ReportYaml implements ReportPrintInterface
 {
     /**
      * print Yaml report
      */
-    public function createReport()
+    public function createReport($logs)
     {
-        return Yaml::dump($this->getLogs());
+        return Yaml::dump($logs);
     }
 }
