@@ -2,8 +2,6 @@
 
 namespace HexletPsrLinter\Report;
 
-use phpDocumentor\Reflection\Types\Integer;
-
 class Message
 {
     private $line;

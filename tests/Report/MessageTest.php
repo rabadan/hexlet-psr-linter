@@ -14,14 +14,11 @@ class MessageTest extends \PHPUnit_Framework_TestCase
         $name = 'test';
         $text = 'TEXT';
 
-
         $message = new Message($line, $level, $name, $text);
 
         $this->assertEquals($message->getLine(), $line);
         $this->assertEquals($message->getLevel(), $level);
         $this->assertEquals($message->getName(), $name);
         $this->assertEquals($message->getMessage(), $text);
-
-        
     }
 }
