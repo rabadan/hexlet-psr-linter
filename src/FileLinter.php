@@ -25,12 +25,11 @@ class FileLinter
     {
         $files = getFilesPath($path);
 
-        array_map(function ($file) {
-            $error = $this->linter->lint(getFileContent($file));
-            if (!empty($error)) {
-                $this->report->addLogs($file, $error);
-            }
+        $result = array_map(function ($file) {
+            return [$file => $this->linter->lint(getFileContent($file))];
         }, $files);
+
+        $this->report->addLogs($result);
 
         return $this->getReport();
     }

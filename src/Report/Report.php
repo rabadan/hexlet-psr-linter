@@ -50,13 +50,15 @@ class Report
     }
 
     /**
-     * @param $file string
-     * @param $messages []
+     * @param $report mixed
      */
-    public function addLogs($file, $messages)
+    public function addLogs($report)
     {
-        foreach ($messages as $message) {
-            $this->logs[$file][] = $message;
+        foreach ($report[0] as $file => $message) {
+            if (empty($message)) {
+                continue;
+            }
+            $this->logs[$file] = $message;
         }
     }
 
