@@ -10,7 +10,7 @@ class FileLinterTest extends \PHPUnit_Framework_TestCase
     {
         $linter = new FileLinter(new Linter());
         $result = $linter->lint(__DIR__."/fixtures/good");
-        $this->assertEquals($result->getLogs(),[]);
+        $this->assertEquals($result->getLogs(), []);
     }
 
     public function testLinterRunBad()

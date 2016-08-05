@@ -24,7 +24,7 @@ class FileLinter
     {
         $files = getFilesPath($path);
 
-        array_map(function($file) {
+        array_map(function ($file) {
             $error = $this->linter->lint(getFileContent($file));
             if (!empty($error)) {
                 $this->report->addLogs($file, $error);
