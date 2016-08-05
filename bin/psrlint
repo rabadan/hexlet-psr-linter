@@ -30,13 +30,12 @@ $cmd->option('format')
 $exitCode = 0;
 
 $linter = new Linter();
-$report = new Report($cmd['format']);
-$fileLinter = new FileLinter($linter, $report);
+$fileLinter = new FileLinter($linter, new Report($cmd['format']));
 $report = $fileLinter->lint($cmd['path']);
 
 if (!$report->isEmpty()) {
     $exitCode = 1;
-    $report->createReport();
+    $report->printCli();
 }
 
 exit($exitCode);
