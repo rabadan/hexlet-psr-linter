@@ -17,6 +17,14 @@ class ReportTest extends \PHPUnit_Framework_TestCase
         $this->message = new Message(1, Report::LOG_LEVEL_ERROR, 'test', 'message');
     }
 
+    public function testEmpty()
+    {
+        $report = new Report();
+        $this->assertTrue($report->isEmpty());
+        $report->addLog('test.php', $this->message);
+        $this->assertFalse($report->isEmpty());
+    }
+
     public function testReport()
     {
         $report = new Report();

@@ -88,20 +88,4 @@ class Report implements ReportInterface
             }
         }
     }
-
-    /**
-     * print YML report
-     */
-    public function createYmlReport()
-    {
-        return Yaml::dump($this->getLogs());
-    }
-
-    /**
-     * print Json report
-     */
-    public function createJsonReport()
-    {
-        return json_encode($this->getLogs());
-    }
 }
