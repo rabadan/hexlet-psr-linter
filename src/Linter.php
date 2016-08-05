@@ -2,7 +2,6 @@
 
 namespace HexletPsrLinter;
 
-use Colors\Color;
 use HexletPsrLinter\Checks\MethodCheck;
 use HexletPsrLinter\Checks\RegexCheck;
 use HexletPsrLinter\Report\Message;
@@ -12,25 +11,34 @@ use PhpParser\ParserFactory;
 
 class Linter
 {
+    private $report;
 
-    public function run($cmd, $printReport = false)
+    public function __construct()
+    {
+        $this->report = new Report();
+    }
+
+    /**
+     * @return Report
+     */
+    public function getReport(): Report
+    {
+        return $this->report;
+    }
+
+
+    public function run($cmd)
     {
         $resultCode = 0;
 
-
         $files = getFilesPath($cmd['path']);
-        $report = new Report();
 
         foreach ($files as $file) {
             $error = $this->lint(getFileContent($file));
             if (!empty($error)) {
-                $report->addLogs($file, $error);
+                $this->report->addLogs($file, $error);
                 $resultCode = 1;
             }
-        }
-
-        if ($resultCode && $printReport) {
-            $report->createReport($cmd['format']);
         }
 
         return $resultCode;
@@ -46,19 +54,8 @@ class Linter
             new RegexCheck('Stmt_Function', '^[a-z]+([A-Z]?[a-z]+)+$', 'No camel case function name')
         ]);
         $traverser->addVisitor($visitor);
-
-        try {
-            // parse
-            $stmts = $parser->parse($codeFile);
-
-            // traverse
-            $traverser->traverse($stmts);
-
-            $error = $visitor->getErrors();
-        } catch (\PhpParser\Error $e) {
-            $error = [new Message(0, Report::LOG_LEVEL_ERROR, "(Parse Error)", $e->getMessage())];
-        }
-
-        return $error;
+        $stmts = $parser->parse($codeFile);
+        $traverser->traverse($stmts);
+        return $visitor->getErrors();
     }
 }

@@ -3,6 +3,7 @@
 namespace HexletPsrLinter\Report;
 
 use League\CLImate\CLImate;
+use Symfony\Component\Yaml\Yaml;
 
 /**
  * @property $cli CLImate
@@ -18,7 +19,7 @@ class Report
     private $cli;
 
     /**
-     * Logger constructor.
+     * Report constructor.
      */
     public function __construct()
     {
@@ -46,25 +47,35 @@ class Report
         }
     }
 
+    public function getLogs()
+    {
+        return $this->logs;
+    }
 
+    /**
+     * @param $format string
+     * @return mixed
+     */
     public function createReport($format)
     {
         switch ($format) {
             case "yml":
-                $this->createYmlReport();
+                return $this->createYmlReport();
                 break;
             case "json":
-                $this->createJsonReport();
+                return $this->createJsonReport();
                 break;
             default:
                 $this->createTxtReport();
         }
     }
 
-
+    /**
+     * print text report to console
+     */
     public function createTxtReport()
     {
-        foreach ($this->logs as $file => $messages) {
+        foreach ($this->getLogs() as $file => $messages) {
             $this->cli->lightBlue()->bold()->inline($file)->br();
             /** @var $message Message */
             foreach ($messages as $message) {
@@ -90,13 +101,19 @@ class Report
         }
     }
 
+    /**
+     * print YML report
+     */
     public function createYmlReport()
     {
-        $this->cli->white()->inline("Function not implemented")->br();
+        return Yaml::dump($this->getLogs());
     }
 
+    /**
+     * print Json report
+     */
     public function createJsonReport()
     {
-        $this->cli->white()->inline("Function not implemented")->br();
+        return json_encode($this->getLogs());
     }
 }
