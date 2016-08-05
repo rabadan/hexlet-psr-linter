@@ -10,19 +10,25 @@
   "bin": ["bin/hexlet-psr-linter"],
   "type": "library",
   "require": {
-    "nikic/php-parser": "^2.1", 
-    "nategood/commando": "*"
+    "nikic/php-parser": "^2.1",
+    "league/climate": "*",
+    "nategood/commando": "*",
+    "symfony/finder": "^3.1"
   },
   "require-dev": {
     "phpunit/phpunit": "^5.2",
-    "league/climate": "*",
+    "phpunit/php-code-coverage": "^4",
+    "mikey179/vfsStream": "1.6.3",
+    "psy/psysh":"@stable",
     "squizlabs/php_codesniffer": "2.*",
-    "codeclimate/php-test-reporter": "dev-master",
-    "mikey179/vfsStream": "1.6.3"
+    "codeclimate/php-test-reporter": "dev-master"
   },
   "autoload": {
     "psr-4": {
       "HexletPsrLinter\\": "src/"
-    }
+    },
+    "files": [
+      "src/fileTools.php"
+    ]
   }
 }

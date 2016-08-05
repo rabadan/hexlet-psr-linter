@@ -1,0 +1,41 @@
+#!/usr/bin/env php
+
+<?php
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use Commando\Command;
+use HexletPsrLinter\FileLinter;
+use HexletPsrLinter\Linter;
+use HexletPsrLinter\Report\ReportYaml;
+use HexletPsrLinter\Report\ReportJson;
+use HexletPsrLinter\Report\Report;
+
+$cmd = new Command();
+$cmd->option()
+    ->aka('path')
+    ->require()
+    ->describedAs('File path');
+
+$cmd->option('format')
+    ->aka('f')
+    ->description('Report file format [options: txt, json, yml] [default: txt]')
+    ->must(function ($format) {
+        return in_array($format, ['txt', 'json', 'yml']);
+    })
+    ->default('txt');
+
+
+
+$exitCode = 0;
+
+$linter = new Linter();
+$fileLinter = new FileLinter($linter, new Report($cmd['format']));
+$report = $fileLinter->lint($cmd['path']);
+
+if (!$report->isEmpty()) {
+    $exitCode = 1;
+    $report->printCli();
+}
+
+exit($exitCode);

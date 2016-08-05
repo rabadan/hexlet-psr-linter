@@ -5,3 +5,21 @@
 
 # hexlet-psr-linter for rabadan731
 
+## Usage
+
+```
+./bin/psrlint path_to_file_or_directory
+```
+
+### Installation
+
+```
+make install
+```
+
+### Test
+
+```
+make test
+```
+
