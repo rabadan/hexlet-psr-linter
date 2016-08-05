@@ -3,13 +3,14 @@
 namespace HexletPsrLinter\Report;
 
 use League\CLImate\CLImate;
+use League\CLImate\Util\Reader\ReaderInterface;
 use Symfony\Component\Yaml\Yaml;
 
 /**
  * @property $cli CLImate
 */
 
-class Report
+class Report implements ReportInterface
 {
     const LOG_LEVEL_ERROR = 'error';
     const LOG_LEVEL_WARNING = 'warning';
@@ -58,27 +59,9 @@ class Report
     }
 
     /**
-     * @param $format string
-     * @return mixed
-     */
-    public function createReport($format)
-    {
-        switch ($format) {
-            case "yml":
-                return $this->createYmlReport();
-                break;
-            case "json":
-                return $this->createJsonReport();
-                break;
-            default:
-                $this->createTxtReport();
-        }
-    }
-
-    /**
      * print text report to console
      */
-    public function createTxtReport()
+    public function createReport()
     {
         foreach ($this->getLogs() as $file => $messages) {
             $this->cli->lightBlue()->bold()->inline($file)->br();

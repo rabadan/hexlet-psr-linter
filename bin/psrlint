@@ -7,6 +7,9 @@ require_once __DIR__ . '/../vendor/autoload.php';
 use Commando\Command;
 use HexletPsrLinter\FileLinter;
 use HexletPsrLinter\Linter;
+use HexletPsrLinter\Report\ReportYaml;
+use HexletPsrLinter\Report\ReportJson;
+use HexletPsrLinter\Report\Report;
 
 $cmd = new Command();
 $cmd->option()
@@ -26,12 +29,23 @@ $cmd->option('format')
 
 $exitCode = 0;
 
-$fileLinter = new FileLinter(new Linter());
+$linter = new Linter();
+switch ($cmd['format']) {
+    case "yml":
+        $report = new ReportYaml();
+        break;
+    case "json":
+        $report = new ReportJson();
+        break;
+    default:
+        $report = new Report();
+}
+$fileLinter = new FileLinter($linter, $report);
 $report = $fileLinter->lint($cmd['path']);
 
 if (!$report->isEmpty()) {
     $exitCode = 1;
-    $report->createReport($cmd['format']);
+    $report->createReport();
 }
 
 exit($exitCode);

@@ -3,6 +3,7 @@
 namespace HexletPsrLinter;
 
 use HexletPsrLinter\Report\Report;
+use HexletPsrLinter\Report\ReportInterface;
 
 /**
  * Class FileLinter
@@ -14,10 +15,10 @@ class FileLinter
     private $linter;
     private $report;
 
-    public function __construct($linter)
+    public function __construct(Linter $linter, ReportInterface $report)
     {
         $this->linter = $linter;
-        $this->report = new Report();
+        $this->report = $report;
     }
 
     public function lint($path)
