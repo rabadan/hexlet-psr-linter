@@ -1,7 +1,6 @@
 # composer
 /vendor
 /log
-/build
 composer.phar
 ## remove in production!
 composer.lock
