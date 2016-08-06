@@ -2,10 +2,7 @@
 
 namespace HexletPsrLinter\Report;
 
-use HexletPsrLinter\ReportTest;
 use League\CLImate\CLImate;
-use League\CLImate\Util\Reader\ReaderInterface;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * @property $cli CLImate
@@ -30,13 +27,14 @@ class Report
     /**
      * Report constructor.
      */
-    public function __construct($format)
+    public function __construct($logs, $format = 'txt')
     {
         if (!array_key_exists($format, $this->reportClass)) {
             $format = 'txt';
         }
         $this->formatReport = new $this->reportClass[$format];
         $this->logs = [];
+        $this->loadReport($logs);
         $this->cli = new CLImate();
     }
 
@@ -52,13 +50,15 @@ class Report
     /**
      * @param $report mixed
      */
-    public function addLogs($report)
+    public function loadReport($report)
     {
-        foreach ($report[0] as $file => $message) {
-            if (empty($message)) {
-                continue;
+        foreach ($report as $log) {
+            foreach ($log as $file => $message) {
+                if (empty($message)) {
+                    continue;
+                }
+                $this->logs[$file] = $message;
             }
-            $this->logs[$file] = $message;
         }
     }
 
@@ -106,5 +106,6 @@ class Report
                 $this->cli->white()->inline($message->getMessage())->br();
             }
         }
+        $this->cli->br();
     }
 }

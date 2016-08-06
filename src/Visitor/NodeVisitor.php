@@ -1,6 +1,6 @@
 <?php
 
-namespace HexletPsrLinter;
+namespace HexletPsrLinter\Visitor;
 
 use HexletPsrLinter\checks\CheckInterface;
 use PhpParser\Node;

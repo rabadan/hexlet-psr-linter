@@ -1,6 +1,6 @@
 <?php
 
-namespace HexletPsrLinter;
+namespace HexletPsrLinter\Linter;
 
 use HexletPsrLinter\Checks\MethodCheck;
 use HexletPsrLinter\Checks\RegexCheck;
@@ -8,6 +8,7 @@ use HexletPsrLinter\Report\Message;
 use HexletPsrLinter\Report\Report;
 use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
+use HexletPsrLinter\Visitor\NodeVisitor;
 
 class Linter
 {
@@ -17,7 +18,8 @@ class Linter
         $traverser = new NodeTraverser;
         $visitor = new NodeVisitor([
             new MethodCheck,
-            new RegexCheck('Stmt_Function', '^[a-z]+([A-Z]?[a-z]+)+$', 'No camel case function name')
+            new RegexCheck('Stmt_Function', '^[a-z]+([A-Z]?[a-z]+)+$', 'No camel case function name'),
+            new RegexCheck('Expr_Variable', '^[a-z]+([A-Z]?[a-z]+)+$', 'No camel case Variable name')
         ]);
 
         $traverser->addVisitor($visitor);

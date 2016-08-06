@@ -29,13 +29,16 @@ $cmd->option('format')
 
 $exitCode = 0;
 
-$linter = new Linter();
-$fileLinter = new FileLinter($linter, new Report($cmd['format']));
-$report = $fileLinter->lint($cmd['path']);
+$fileLinter = new FileLinter(new Linter());
+$resultLint = $fileLinter->lint($cmd['path']);
+
+$report = new Report($resultLint, $cmd['format']);
 
 if (!$report->isEmpty()) {
     $exitCode = 1;
     $report->printCli();
 }
+
+//eval(\Psy\sh());
 
 exit($exitCode);

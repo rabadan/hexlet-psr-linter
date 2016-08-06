@@ -1,9 +1,9 @@
 <?php
 
-namespace HexletPsrLinter;
+namespace HexletPsrLinter\Linter;
 
-use HexletPsrLinter\Report\Report;
-use HexletPsrLinter\Report\ReportInterface;
+use function HexletPsrLinter\getFilesPath;
+use function HexletPsrLinter\getFileContent;
 
 /**
  * Class FileLinter
@@ -13,12 +13,10 @@ use HexletPsrLinter\Report\ReportInterface;
 class FileLinter
 {
     private $linter;
-    private $report;
 
-    public function __construct(Linter $linter, $report)
+    public function __construct(Linter $linter)
     {
         $this->linter = $linter;
-        $this->report = $report;
     }
 
     public function lint($path)
@@ -29,13 +27,6 @@ class FileLinter
             return [$file => $this->linter->lint(getFileContent($file))];
         }, $files);
 
-        $this->report->addLogs($result);
-
-        return $this->getReport();
-    }
-
-    public function getReport()
-    {
-        return $this->report;
+        return $result;
     }
 }

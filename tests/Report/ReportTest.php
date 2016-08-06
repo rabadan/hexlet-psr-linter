@@ -1,11 +1,7 @@
 <?php
 
-namespace HexletPsrLinter;
+namespace HexletPsrLinter\Report;
 
-use HexletPsrLinter\Report\Message;
-use HexletPsrLinter\Report\Report;
-use HexletPsrLinter\Report\ReportJson;
-use HexletPsrLinter\Report\ReportYaml;
 use Symfony\Component\Yaml\Yaml;
 
 class ReportTest extends \PHPUnit_Framework_TestCase
@@ -19,7 +15,7 @@ class ReportTest extends \PHPUnit_Framework_TestCase
 
     public function testEmpty()
     {
-        $report = new Report('txt');
+        $report = new Report([]);
         $this->assertTrue($report->isEmpty());
         $report->addLog('test.php', $this->message);
         $this->assertFalse($report->isEmpty());
@@ -27,14 +23,14 @@ class ReportTest extends \PHPUnit_Framework_TestCase
 
     public function testLogs()
     {
-        $report = new Report('txt');
+        $report = new Report([]);
         $report->addLog('test.php', $this->message);
         $this->assertEquals($report->getLogs(), ['test.php'=>[$this->message]]);
     }
 
     public function testReportTxt()
     {
-        $report = new Report('txt');
+        $report = new Report([], 'txt');
         $report->addLog('test.php', $this->message);
         $val = "file: test.php" .
             PHP_EOL .
@@ -45,14 +41,15 @@ class ReportTest extends \PHPUnit_Framework_TestCase
 
     public function testReportYaml()
     {
-        $report = new Report('yml');
+        $report = new Report([], 'yml');
         $report->addLog('test.php', $this->message);
-        $this->assertEquals(Yaml::dump($report->getLogs()), $report->printFormat());
+        $yaml = new Yaml();
+        $this->assertEquals($yaml->dump($report->getLogs()), $report->printFormat());
     }
 
     public function testReportJson()
     {
-        $report = new Report('json');
+        $report = new Report([], 'json');
         $report->addLog('test.php', $this->message);
         $this->assertEquals(json_encode($report->getLogs()), $report->printFormat());
     }
