@@ -1,6 +1,6 @@
 <?php
 
-namespace HexletPsrLinter\Report;
+namespace HexletPsrLinter\Report\Format;
 
 use Symfony\Component\Yaml\Yaml;
 

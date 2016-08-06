@@ -1,10 +1,8 @@
 <?php
 
-namespace HexletPsrLinter\Report;
+namespace HexletPsrLinter\Report\Format;
 
-use League\CLImate\CLImate;
-use League\CLImate\Util\Reader\ReaderInterface;
-use Symfony\Component\Yaml\Yaml;
+use HexletPsrLinter\Report\Message;
 
 /**
  * @property $cli CLImate

@@ -1,6 +1,6 @@
 <?php
 
-namespace HexletPsrLinter\Report;
+namespace HexletPsrLinter\Report\Format;
 
 interface ReportPrintInterface
 {

@@ -8,6 +8,7 @@ use Commando\Command;
 use HexletPsrLinter\Report\Report;
 use function HexletPsrLinter\linter;
 use function HexletPsrLinter\fileLinter;
+use function HexletPsrLinter\printCli;
 
 $cmd = new Command();
 $cmd->option()
@@ -33,7 +34,7 @@ $report = new Report($resultLint, $cmd['format']);
 
 if (!$report->isEmpty()) {
     $exitCode = 1;
-    $report->printCli();
+    printCli($report->getLogs());
 }
 
 exit($exitCode);
