@@ -5,11 +5,10 @@
 require_once __DIR__ . '/../vendor/autoload.php';
 
 use Commando\Command;
-use HexletPsrLinter\FileLinter;
-use HexletPsrLinter\Linter;
-use HexletPsrLinter\Report\ReportYaml;
-use HexletPsrLinter\Report\ReportJson;
 use HexletPsrLinter\Report\Report;
+use function HexletPsrLinter\linter;
+use function HexletPsrLinter\fileLinter;
+use function HexletPsrLinter\printCli;
 
 $cmd = new Command();
 $cmd->option()
@@ -29,13 +28,13 @@ $cmd->option('format')
 
 $exitCode = 0;
 
-$linter = new Linter();
-$fileLinter = new FileLinter($linter, new Report($cmd['format']));
-$report = $fileLinter->lint($cmd['path']);
+$resultLint = fileLinter(linter(), $cmd['path']);
+
+$report = new Report($resultLint, $cmd['format']);
 
 if (!$report->isEmpty()) {
     $exitCode = 1;
-    $report->printCli();
+    printCli($report->getLogs());
 }
 
 exit($exitCode);

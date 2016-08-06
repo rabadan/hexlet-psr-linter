@@ -1,14 +1,8 @@
 <?php
 
-namespace HexletPsrLinter\Report;
+namespace HexletPsrLinter\Report\Format;
 
-use League\CLImate\CLImate;
-use League\CLImate\Util\Reader\ReaderInterface;
 use Symfony\Component\Yaml\Yaml;
-
-/**
- * @property $cli CLImate
-*/
 
 class ReportYaml implements ReportPrintInterface
 {
@@ -17,6 +11,7 @@ class ReportYaml implements ReportPrintInterface
      */
     public function createReport($logs)
     {
-        return Yaml::dump($logs);
+        $yaml = new Yaml();
+        return $yaml->dump($logs);
     }
 }
