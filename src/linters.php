@@ -6,7 +6,6 @@ use HexletPsrLinter\Checks\FixVariableCheck;
 use HexletPsrLinter\Checks\MethodCheck;
 use HexletPsrLinter\Checks\RegexCheck;
 use HexletPsrLinter\Checks\SideEffectsCheck;
-use HexletPsrLinter\Exceptions\FileExistsException;
 use HexletPsrLinter\Exceptions\SaveFileException;
 use HexletPsrLinter\Report\Message;
 use HexletPsrLinter\Report\Report;
@@ -17,7 +16,7 @@ use HexletPsrLinter\Visitor\NodeVisitor;
 
 function linter()
 {
-    return function ($codeFile, $fix = false, $filePath = null) {
+    return function ($codeFile, $params) {
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         $traverser = new NodeTraverser;
         $visitor = new NodeVisitor([
@@ -25,8 +24,11 @@ function linter()
             new RegexCheck('Stmt_Function', '^[a-z]+([A-Z]?[a-z]+)*$', 'No camel case function name'),
             new RegexCheck('Expr_Variable', '^[a-z]+([A-Z]?[a-z1-9]+)*$', 'No camel case Variable name'),
             new SideEffectsCheck(),
-            new FixVariableCheck($fix)
         ]);
+
+        if (isset($params['fix'])) {
+            $visitor->registerCheck(new FixVariableCheck($params['fix']));
+        }
 
         $traverser->addVisitor($visitor);
 
@@ -35,33 +37,53 @@ function linter()
             $traverser->traverse($stmts);
             $errors = $visitor->getErrors();
 
-            if ($fix && !empty($errors)) {
+            // если у нас были изменеия в коде, то мы генерирум новый код
+            if (!empty($errors)) {
                 $fixItems = array_filter($errors, function ($item) {
                     return $item->getLevel() == Report::LOG_LEVEL_FIXED;
                 });
 
                 if (!empty($fixItems)) {
                     $prettyPrinter = new PrettyPrinter\Standard();
-                    writeFileContent($filePath, "<?php" . PHP_EOL . $prettyPrinter->prettyPrint($stmts) . PHP_EOL);
+                    $codeFile = "<?php\n{$prettyPrinter->prettyPrint($stmts)}\n";
                 }
             }
         } catch (\PhpParser\Error $e) {
-            $errors[] = new Message(0, Report::LOG_LEVEL_ERROR, "(Parse Error)", $e->getMessage());
-        } catch (SaveFileException $e) {
-            $errors[] = new Message(0, Report::LOG_LEVEL_ERROR, "(Save fix file error)", $e->getMessage());
+            $errors[]= new Message(0, Report::LOG_LEVEL_ERROR, "(Parse Error)", $e->getMessage());
         }
         finally {
-            return $errors;
+            return ["errors" => $errors, "codeFile" => $codeFile];
         }
     };
 }
 
-function fileLinter($linter, $path, $fix = false)
+/**
+ * @param $linter
+ * @param $params
+ * @return array
+ */
+function fileLinter($linter, $params)
 {
-    $files = getFilesPath($path);
+    $files = getFilesPath($params['path']);
 
-    $result = array_map(function ($file) use ($linter, $fix) {
-        return [$file => $linter(getFileContent($file), $fix, $file)];
+    $result = array_map(function ($file) use ($linter, $params) {
+        $result = $linter(getFileContent($file), $params);
+
+        if (isset($params['fix']) && $params['fix']) {
+            //eval(\Psy\sh());
+            try {
+                writeFileContent($file, $result['codeFile']);
+            } catch (SaveFileException $e) {
+                $result['errors'][$file][] = new Message(
+                    0,
+                    Report::LOG_LEVEL_ERROR,
+                    "(Save fix file error)",
+                    $e->getMessage()
+                );
+            }
+        }
+
+        return [$file => $result['errors']];
     }, $files);
 
     return $result;

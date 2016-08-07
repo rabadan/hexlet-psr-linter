@@ -5,7 +5,6 @@ namespace HexletPsrLinter\Report;
 use HexletPsrLinter\Report\Format\ReportJson;
 use HexletPsrLinter\Report\Format\ReportTxt;
 use HexletPsrLinter\Report\Format\ReportYaml;
-use League\CLImate\CLImate;
 
 class Report
 {

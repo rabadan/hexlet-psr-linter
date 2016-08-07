@@ -30,7 +30,12 @@ $cmd->option('fix')
 
 $exitCode = 0;
 
-$resultLint = fileLinter(linter(), $cmd['path'], $cmd['fix']);
+$resultLint = fileLinter(linter(), [
+    'path' => $cmd['path'],
+    'fix'  => $cmd['fix']
+]);
+
+//eval(\Psy\sh());
 
 $report = new Report($resultLint, $cmd['format']);
 

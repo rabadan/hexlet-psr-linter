@@ -45,7 +45,7 @@ class FixVariableCheck implements CheckInterface
                 $this->errors = new Message(
                     $node->getLine(),
                     Report::LOG_LEVEL_FIXED,
-                    $node->name." => ".$newName,
+                    "{$node->name} => {$newName}",
                     $this->commentFix
                 );
                 $node->name = $newName;
