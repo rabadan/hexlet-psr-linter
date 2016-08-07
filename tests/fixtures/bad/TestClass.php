@@ -6,6 +6,8 @@ class TestClass
 {
     public $camel_case;
 
+    public $camelcase;
+
     public function iniSet()
     {
         // побочный эффект: изменение настроек
@@ -16,6 +18,11 @@ class TestClass
     public function camel_CAse()
     {
         echo "\n";
+        return 1;
+    }
+
+    public function __construct()
+    {
         return 1;
     }
 

@@ -31,7 +31,7 @@ class NodeVisitor extends NodeVisitorAbstract
      * @param Node $node
      * @return void
      */
-    public function leaveNode(Node $node)
+    public function enterNode(Node $node)
     {
         foreach ($this->checks as $check) {
             if ($check->isAcceptable($node)) {

@@ -5,6 +5,11 @@ function name()
     return "Good!";
 }
 
+function n()
+{
+    return "Good!";
+}
+
 function nameGood()
 {
     return "Sumptuously!";

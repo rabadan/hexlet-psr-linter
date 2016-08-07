@@ -6,15 +6,14 @@ ini_set('error_reporting', E_ALL);
 // побочный эффект: передача данных в выходной поток
 echo "\n";
 
-// побочный эффект: подключение файла
-include "good.php";
-
-// объявление
 function foo()
 {
-    return 'rrr';
     // тело функции
+    return 'rrr';
 }
+
+// побочный эффект: подключение файла
+include "bad.php";
 
 $r = foo();
 
