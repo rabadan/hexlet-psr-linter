@@ -4,6 +4,7 @@ namespace HexletPsrLinter;
 
 use HexletPsrLinter\Exceptions\LoadFileException;
 use HexletPsrLinter\Exceptions\FileExistsException;
+use HexletPsrLinter\Exceptions\SaveFileException;
 use HexletPsrLinter\Report\Message;
 use HexletPsrLinter\Report\Report;
 use League\CLImate\CLImate;
@@ -49,6 +50,18 @@ function getFileContent($path)
     }
 
     return $code;
+}
+
+
+function writeFileContent($filePath, $code)
+{
+    if (empty($filePath)) {
+        throw new SaveFileException("Error file path: {$filePath}");
+    }
+    $code = file_put_contents($filePath, $code);
+    if ($code === false) {
+        throw new SaveFileException("Error save file from: {$filePath}");
+    }
 }
 
 /**

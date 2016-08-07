@@ -24,9 +24,13 @@ $cmd->option('format')
     })
     ->default('txt');
 
+$cmd->option('fix')
+    ->description('Auto fix names (my_var_name -> MyVarName)')
+    ->boolean();
+
 $exitCode = 0;
 
-$resultLint = fileLinter(linter(), $cmd['path']);
+$resultLint = fileLinter(linter(), $cmd['path'], $cmd['fix']);
 
 $report = new Report($resultLint, $cmd['format']);
 
