@@ -15,13 +15,13 @@ class FixVariableCheckTest extends \PHPUnit_Framework_TestCase
         ];
 
         foreach ($validData as $val => $fixVal) {
-            $chekFix = new FixVariableCheck();
+            $chekFix = new VariableCheck();
             $data = new Node\Expr\Variable($val);
             $this->assertFalse($chekFix->validate($data, true));
             $this->assertEquals($data->name, $fixVal);
             $this->assertNotEquals($chekFix->getErrors(), []);
 
-            $chekNoFix = new FixVariableCheck();
+            $chekNoFix = new VariableCheck();
             $data = new Node\Expr\Variable($val);
             $this->assertFalse($chekNoFix->validate($data, false));
             $this->assertNotEquals($data->name, $fixVal);
@@ -29,22 +29,21 @@ class FixVariableCheckTest extends \PHPUnit_Framework_TestCase
         }
     }
 
-    public function testFixVariableCheckBad()
+    public function testVariableCheckBad()
     {
         $invalidData = [
-            'camelcase',
             '_camelcase',
             'camelcase_',
-            'camelCamelCamel',
-            'camelCamelCamel',
+            'camel_CamelCamel',
+            'camel__Camel',
             '_camelCase',
             'camelCase_'
         ];
 
         foreach ($invalidData as $val) {
-            $chekNoFix = new FixVariableCheck();
-            $this->assertTrue($chekNoFix->validate(new Node\Expr\Variable($val), false));
-            $this->assertEquals($chekNoFix->getErrors(), []);
+            $chekNoFix = new VariableCheck();
+            $this->assertFalse($chekNoFix->validate(new Node\Expr\Variable($val), false));
+            $this->assertNotEquals($chekNoFix->getErrors(), []);
         }
     }
 }

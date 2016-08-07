@@ -1,7 +1,7 @@
 <?php
-$testTest = '';
+$test_test = '';
 $test__test = '';
-$testTestTest = '';
+$test_test_test = '';
 $test_Test = '';
 $test_Test_test = '';
 $_testTest = '';

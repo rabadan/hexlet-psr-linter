@@ -6,7 +6,7 @@ use HexletPsrLinter\Report\Message;
 use HexletPsrLinter\Report\Report;
 use PhpParser\Node;
 
-class FixVariableCheck implements CheckInterface
+class VariableCheck implements CheckInterface
 {
     private $errors = [];
     private $nodeType;
@@ -16,9 +16,8 @@ class FixVariableCheck implements CheckInterface
 
     public function __construct(
         $nodeType = 'Expr_Variable',
-        $regex = '^[a-z]+([a-z1-9]+)+(_[a-z1-9]+)+$',
-        $comment = "The variable name can be automatically changed in CamelCaps format. ".
-        "To do this, run linter with the option 'fix'",
+        $regex = '^[a-z]+([A-Z]?[a-z1-9]+)*$',
+        $comment = "The variable name no CamelCaps format. ",
         $commentFix = "Variable name corrected to camelСaps format"
     ) {
         $this->nodeType = $nodeType;
@@ -36,8 +35,9 @@ class FixVariableCheck implements CheckInterface
     public function validate(Node $node, $changeable)
     {
         $result = preg_match_all("/{$this->regex}/", $node->name);
-        if ($result > 0) {
-            if ($changeable) {
+        if ($result == 0) {
+            $isFix = preg_match_all("/^[a-z]+([a-z1-9]+)+(_[a-z1-9]+)+$/", $node->name);
+            if ($changeable && $isFix) {
                 $newName = $this->correctionVariableName($node->name);
                 $this->errors = new Message(
                     $node->getLine(),
@@ -51,7 +51,7 @@ class FixVariableCheck implements CheckInterface
 
             $this->errors = new Message(
                 $node->getLine(),
-                Report::LOG_LEVEL_WARNING,
+                $isFix ? Report::LOG_LEVEL_WARNING : Report::LOG_LEVEL_ERROR,
                 $node->name,
                 $this->comment
             );

@@ -17,7 +17,6 @@ class SideEffectsCheck implements CheckInterface
     private $isStmt;
     private $isSideEffect;
 
-
     public function __construct($comment = "")
     {
         $this->comment = $comment;
@@ -28,7 +27,9 @@ class SideEffectsCheck implements CheckInterface
         $this->sideEffectTypes[] = 'Expr_Include';
         $this->sideEffectTypes[] = 'Stmt_Echo';
 
-        $this->reset();
+        $this->endLineChecks = 0;
+        $this->isStmt = false;
+        $this->isSideEffect = false;
     }
 
     public function isAcceptable(Node $node)
@@ -73,13 +74,6 @@ class SideEffectsCheck implements CheckInterface
     public function isSideEffects()
     {
         return $this->isSideEffect && $this->isStmt;
-    }
-
-    public function reset()
-    {
-        $this->endLineChecks = 0;
-        $this->isStmt = false;
-        $this->isSideEffect = false;
     }
 
     public function getErrors()

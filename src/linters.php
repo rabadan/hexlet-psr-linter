@@ -2,10 +2,10 @@
 
 namespace HexletPsrLinter;
 
-use HexletPsrLinter\Checks\FixVariableCheck;
 use HexletPsrLinter\Checks\MethodCheck;
 use HexletPsrLinter\Checks\RegexCheck;
 use HexletPsrLinter\Checks\SideEffectsCheck;
+use HexletPsrLinter\Checks\VariableCheck;
 use HexletPsrLinter\Exceptions\SaveFileException;
 use HexletPsrLinter\Report\Message;
 use HexletPsrLinter\Report\Report;
@@ -24,9 +24,8 @@ function linter()
         $visitor = new NodeVisitor([
             new MethodCheck(),
             new RegexCheck('Stmt_Function', '^[a-z]+([A-Z]?[a-z]+)*$', 'No camel case function name'),
-            new RegexCheck('Expr_Variable', '^[a-z]+([A-Z]?[a-z1-9]+)*$', 'No camel case Variable name'),
+            new VariableCheck(),
             new SideEffectsCheck(),
-            new FixVariableCheck()
         ], $fix);
 
 

@@ -13,41 +13,41 @@ class SideEffectsCheckTest extends \PHPUnit_Framework_TestCase
     private $traverser;
     private $check;
 
-    public function setUp()
-    {
-        $this->parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
-        $this->traverser = new NodeTraverser;
-        $this->check = new SideEffectsCheck();
-        $visitor = new NodeVisitor([
-            $this->check
-        ], false);
-
-        $this->traverser->addVisitor($visitor);
-    }
-
     public function testSideEffectsGood()
     {
-        $this->check->reset();
-        $codeSideEffectsGood = file_get_contents(__DIR__ . "/../fixtures/good/noSideEffects.php");
-        $stmts = $this->parser->parse($codeSideEffectsGood);
-        $this->traverser->traverse($stmts);
-        $this->assertFalse($this->check->isSideEffects());
+        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+        $traverser = new NodeTraverser;
+        $check = new SideEffectsCheck();
+        $visitor = new NodeVisitor([$check], false);
+        $traverser->addVisitor($visitor);
 
-        $this->check->reset();
+        $codeSideEffectsGood = file_get_contents(__DIR__ . "/../fixtures/good/noSideEffects.php");
+        $stmts = $parser->parse($codeSideEffectsGood);
+        $traverser->traverse($stmts);
+        $this->assertFalse($check->isSideEffects());
+
+        $traverser->removeVisitor($visitor);
+        $check = new SideEffectsCheck();
+        $visitor = new NodeVisitor([$check], false);
+        $traverser->addVisitor($visitor);
         $codeSideEffectsGood = file_get_contents(__DIR__ . "/../fixtures/good/TestClass.php");
-        $stmts = $this->parser->parse($codeSideEffectsGood);
-        $this->traverser->traverse($stmts);
-        $this->assertFalse($this->check->isSideEffects());
+        $stmts = $parser->parse($codeSideEffectsGood);
+        $traverser->traverse($stmts);
+        $this->assertFalse($check->isSideEffects());
     }
 
     public function testSideEffectsBad()
     {
-        $this->check->reset();
+        $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
+        $traverser = new NodeTraverser;
+        $check = new SideEffectsCheck();
+        $visitor = new NodeVisitor([$check], false);
+        $traverser->addVisitor($visitor);
 
         $codeSideEffectsGood = file_get_contents(__DIR__ . "/../fixtures/bad/sideEffects.php");
-        $stmts = $this->parser->parse($codeSideEffectsGood);
-        $this->traverser->traverse($stmts);
+        $stmts = $parser->parse($codeSideEffectsGood);
+        $traverser->traverse($stmts);
 
-        $this->assertTrue($this->check->isSideEffects());
+        $this->assertTrue($check->isSideEffects());
     }
 }
