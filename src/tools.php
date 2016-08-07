@@ -6,6 +6,7 @@ use HexletPsrLinter\Exceptions\LoadFileException;
 use HexletPsrLinter\Exceptions\FileExistsException;
 use HexletPsrLinter\Report\Message;
 use HexletPsrLinter\Report\Report;
+use League\CLImate\CLImate;
 
 function getFilesPath($path)
 {
@@ -56,29 +57,31 @@ function getFileContent($path)
  */
 function printCli($logs)
 {
+    $cli = new CLImate();
+    
     foreach ($logs as $file => $messages) {
-        $this->cli->lightBlue()->bold()->inline($file)->br();
+        $cli->lightBlue()->bold()->inline($file)->br();
         /** @var $message Message */
         foreach ($messages as $message) {
-            $this->cli->white()->bold()->inline(sprintf('%-5s', $message->getLine()));
+            $cli->white()->bold()->inline(sprintf('%-5s', $message->getLine()));
 
             $format = '%-10s';
             $text = $message->getLevel();
             switch ($text) {
                 case Report::LOG_LEVEL_ERROR:
-                    $this->cli->red()->inline(sprintf($format, $text));
+                    $cli->red()->inline(sprintf($format, $text));
                     break;
                 case Report::LOG_LEVEL_WARNING:
-                    $this->cli->yellow()->inline(sprintf($format, $text));
+                    $cli->yellow()->inline(sprintf($format, $text));
                     break;
                 case Report::LOG_LEVEL_FIXED:
-                    $this->cli->green()->inline(sprintf($format, $text));
+                    $cli->green()->inline(sprintf($format, $text));
                     break;
             }
 
-            $this->cli->lightCyan()->bold()->inline(sprintf('%-25s', $message->getName()));
-            $this->cli->white()->inline($message->getMessage())->br();
+            $cli->lightCyan()->bold()->inline(sprintf('%-25s', $message->getName()));
+            $cli->white()->inline($message->getMessage())->br();
         }
     }
-    $this->cli->br();
+    $cli->br();
 }

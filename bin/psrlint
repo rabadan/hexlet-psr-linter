@@ -24,8 +24,6 @@ $cmd->option('format')
     })
     ->default('txt');
 
-
-
 $exitCode = 0;
 
 $resultLint = fileLinter(linter(), $cmd['path']);

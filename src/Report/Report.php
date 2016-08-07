@@ -7,10 +7,6 @@ use HexletPsrLinter\Report\Format\ReportTxt;
 use HexletPsrLinter\Report\Format\ReportYaml;
 use League\CLImate\CLImate;
 
-/**
- * @property $cli CLImate
-*/
-
 class Report
 {
     const LOG_LEVEL_ERROR = 'error';
@@ -18,7 +14,6 @@ class Report
     const LOG_LEVEL_FIXED = 'fixed';
 
     private $logs;
-    private $cli;
     private $formatReport;
     private $reportClass = [
         'txt'  => ReportTxt::class,
@@ -38,7 +33,6 @@ class Report
         $this->formatReport = new $this->reportClass[$format];
         $this->logs = [];
         $this->loadReport($logs);
-        $this->cli = new CLImate();
     }
 
     /**
