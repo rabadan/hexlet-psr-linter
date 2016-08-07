@@ -18,7 +18,7 @@ class RegexCheckTest extends \PHPUnit_Framework_TestCase
         $check = new RegexCheck('Stmt_Function', '^[a-z]+([A-Z]?[a-z]+)+$', 'No camel case function name');
 
         foreach ($validDate as $val) {
-            $this->assertTrue($check->validate(new Stmt\Function_($val)));
+            $this->assertTrue($check->validate(new Stmt\Function_($val), false));
         }
     }
 
@@ -36,7 +36,7 @@ class RegexCheckTest extends \PHPUnit_Framework_TestCase
         $check = new RegexCheck('Stmt_Function', '^[a-z]+([A-Z]?[a-z]+)+$', 'No camel case function name');
 
         foreach ($invalidData as $val) {
-            $this->assertFalse($check->validate(new Stmt\Function_($val)));
+            $this->assertFalse($check->validate(new Stmt\Function_($val), false));
         }
     }
 }

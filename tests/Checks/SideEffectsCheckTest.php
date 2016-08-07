@@ -20,7 +20,7 @@ class SideEffectsCheckTest extends \PHPUnit_Framework_TestCase
         $this->check = new SideEffectsCheck();
         $visitor = new NodeVisitor([
             $this->check
-        ]);
+        ], false);
 
         $this->traverser->addVisitor($visitor);
     }

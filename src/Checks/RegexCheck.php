@@ -25,7 +25,7 @@ class RegexCheck implements CheckInterface
         return $node->getType() === $this->nodeType;
     }
 
-    public function validate(Node $node)
+    public function validate(Node $node, $changeable)
     {
         $result = preg_match_all("/{$this->regex}/", $node->name);
         if ($result == 0) {

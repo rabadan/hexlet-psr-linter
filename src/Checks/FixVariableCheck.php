@@ -11,19 +11,16 @@ class FixVariableCheck implements CheckInterface
     private $errors = [];
     private $nodeType;
     private $regex;
-    private $fix;
     private $comment;
     private $commentFix;
 
     public function __construct(
-        $fix = false,
         $nodeType = 'Expr_Variable',
         $regex = '^[a-z]+([a-z1-9]+)+(_[a-z1-9]+)+$',
         $comment = "The variable name can be automatically changed in CamelCaps format. ".
         "To do this, run linter with the option 'fix'",
         $commentFix = "Variable name corrected to camelСaps format"
     ) {
-        $this->fix      = $fix;
         $this->nodeType = $nodeType;
         $this->regex    = $regex;
         $this->comment  = $comment;
@@ -36,11 +33,11 @@ class FixVariableCheck implements CheckInterface
         return $node->getType() === $this->nodeType;
     }
 
-    public function validate(Node $node)
+    public function validate(Node $node, $changeable)
     {
         $result = preg_match_all("/{$this->regex}/", $node->name);
         if ($result > 0) {
-            if ($this->fix) {
+            if ($changeable) {
                 $newName = $this->correctionVariableName($node->name);
                 $this->errors = new Message(
                     $node->getLine(),

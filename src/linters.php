@@ -17,6 +17,8 @@ use HexletPsrLinter\Visitor\NodeVisitor;
 function linter()
 {
     return function ($codeFile, $params) {
+        $fix = isset($params['fix'])?$params['fix']:false;
+
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         $traverser = new NodeTraverser;
         $visitor = new NodeVisitor([
@@ -24,11 +26,9 @@ function linter()
             new RegexCheck('Stmt_Function', '^[a-z]+([A-Z]?[a-z]+)*$', 'No camel case function name'),
             new RegexCheck('Expr_Variable', '^[a-z]+([A-Z]?[a-z1-9]+)*$', 'No camel case Variable name'),
             new SideEffectsCheck(),
-        ]);
+            new FixVariableCheck()
+        ], $fix);
 
-        if (isset($params['fix'])) {
-            $visitor->registerCheck(new FixVariableCheck($params['fix']));
-        }
 
         $traverser->addVisitor($visitor);
 

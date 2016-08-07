@@ -14,9 +14,11 @@ class NodeVisitor extends NodeVisitorAbstract
 {
     private $errors = [];
     private $checks = [];
+    private $changeable;
 
-    public function __construct($checks)
+    public function __construct($checks, $changeable)
     {
+        $this->changeable = $changeable;
         foreach ($checks as $check) {
             $this->registerCheck($check);
         }
@@ -35,7 +37,7 @@ class NodeVisitor extends NodeVisitorAbstract
     {
         foreach ($this->checks as $check) {
             if ($check->isAcceptable($node)) {
-                if (!$check->validate($node)) {
+                if (!$check->validate($node, $this->changeable)) {
                     $this->errors[] = $check->getErrors();
                 };
             }

@@ -45,7 +45,7 @@ class SideEffectsCheck implements CheckInterface
         return false;
     }
 
-    public function validate(Node $node)
+    public function validate(Node $node, $changeable)
     {
         if (in_array($node->getType(), $this->sideEffectTypes)) {
             $this->isSideEffect = true;

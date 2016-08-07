@@ -20,7 +20,7 @@ class MethodCheckTest extends \PHPUnit_Framework_TestCase
         $check = new MethodCheck();
 
         foreach ($validDate as $val) {
-            $this->assertTrue($check->validate(new Stmt\ClassMethod($val)));
+            $this->assertTrue($check->validate(new Stmt\ClassMethod($val), false));
         }
 
         $this->assertEquals($check->getErrors(), []);
@@ -38,7 +38,7 @@ class MethodCheckTest extends \PHPUnit_Framework_TestCase
         $check = new MethodCheck();
 
         foreach ($invalidData as $val) {
-            $this->assertFalse($check->validate(new Stmt\ClassMethod($val)));
+            $this->assertFalse($check->validate(new Stmt\ClassMethod($val), false));
         }
 
         $this->assertNotEquals($check->getErrors(), []);

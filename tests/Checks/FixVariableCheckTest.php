@@ -15,15 +15,15 @@ class FixVariableCheckTest extends \PHPUnit_Framework_TestCase
         ];
 
         foreach ($validData as $val => $fixVal) {
-            $chekFix = new FixVariableCheck(true);
+            $chekFix = new FixVariableCheck();
             $data = new Node\Expr\Variable($val);
-            $this->assertFalse($chekFix->validate($data));
+            $this->assertFalse($chekFix->validate($data, true));
             $this->assertEquals($data->name, $fixVal);
             $this->assertNotEquals($chekFix->getErrors(), []);
 
             $chekNoFix = new FixVariableCheck();
             $data = new Node\Expr\Variable($val);
-            $this->assertFalse($chekNoFix->validate($data));
+            $this->assertFalse($chekNoFix->validate($data, false));
             $this->assertNotEquals($data->name, $fixVal);
             $this->assertNotEquals($chekNoFix->getErrors(), []);
         }
@@ -43,7 +43,7 @@ class FixVariableCheckTest extends \PHPUnit_Framework_TestCase
 
         foreach ($invalidData as $val) {
             $chekNoFix = new FixVariableCheck();
-            $this->assertTrue($chekNoFix->validate(new Node\Expr\Variable($val)));
+            $this->assertTrue($chekNoFix->validate(new Node\Expr\Variable($val), false));
             $this->assertEquals($chekNoFix->getErrors(), []);
         }
     }

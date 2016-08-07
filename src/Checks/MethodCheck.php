@@ -38,7 +38,7 @@ class MethodCheck implements CheckInterface
         "__debugInfo"
     ];
 
-    public function validate(Node $node)
+    public function validate(Node $node, $changeable)
     {
         if (!in_array($node->name, $this->magicMethod)) {
             $result = preg_match_all("/{$this->regex}/", $node->name);
