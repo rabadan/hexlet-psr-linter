@@ -87,7 +87,7 @@ function printCli($logs)
                 case Report::LOG_LEVEL_WARNING:
                     $cli->yellow()->inline(sprintf($format, $text));
                     break;
-                case Report::LOG_LEVEL_FIXED:
+                case Report::LOG_LEVEL_INFO:
                     $cli->green()->inline(sprintf($format, $text));
                     break;
             }

@@ -10,7 +10,7 @@ class Report
 {
     const LOG_LEVEL_ERROR = 'error';
     const LOG_LEVEL_WARNING = 'warning';
-    const LOG_LEVEL_FIXED = 'fixed';
+    const LOG_LEVEL_INFO = 'info';
 
     private $logs;
     private $formatReport;

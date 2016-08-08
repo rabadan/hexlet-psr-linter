@@ -46,7 +46,7 @@ class SideEffectsCheck implements CheckInterface
         return false;
     }
 
-    public function validate(Node $node, $changeable)
+    public function validate(Node $node)
     {
         if (in_array($node->getType(), $this->sideEffectTypes)) {
             $this->isSideEffect = true;
@@ -57,7 +57,7 @@ class SideEffectsCheck implements CheckInterface
         }
 
         if ($this->isSideEffects()) {
-            $this->errors = new Message(
+            $this->errors[] = new Message(
                 0,
                 Report::LOG_LEVEL_ERROR,
                 "",
@@ -69,6 +69,11 @@ class SideEffectsCheck implements CheckInterface
         }
 
         return true;
+    }
+
+    public function modification(Node $node)
+    {
+        return false;
     }
 
     public function isSideEffects()

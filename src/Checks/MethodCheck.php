@@ -38,12 +38,12 @@ class MethodCheck implements CheckInterface
         "__debugInfo"
     ];
 
-    public function validate(Node $node, $changeable)
+    public function validate(Node $node)
     {
         if (!in_array($node->name, $this->magicMethod)) {
             $result = preg_match_all("/{$this->regex}/", $node->name);
             if ($result == 0) {
-                $this->errors = new Message(
+                $this->errors[] = new Message(
                     $node->getLine(),
                     Report::LOG_LEVEL_ERROR,
                     $node->name,
@@ -54,6 +54,11 @@ class MethodCheck implements CheckInterface
             }
         }
         return true;
+    }
+
+    public function modification(Node $node)
+    {
+        return false;
     }
 
     public function isAcceptable(Node $node)

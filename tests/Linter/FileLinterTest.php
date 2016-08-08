@@ -23,6 +23,7 @@ class FileLinterTest extends \PHPUnit_Framework_TestCase
             'path' => __DIR__ . "/../fixtures/bad/bad.php"
         ]);
         $report = new Report($result);
+     //   eval(\Psy\sh());
         $this->assertNotEquals($report->getLogs(), []);
     }
 }

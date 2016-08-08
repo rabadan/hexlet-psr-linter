@@ -25,11 +25,11 @@ class RegexCheck implements CheckInterface
         return $node->getType() === $this->nodeType;
     }
 
-    public function validate(Node $node, $changeable)
+    public function validate(Node $node)
     {
         $result = preg_match_all("/{$this->regex}/", $node->name);
         if ($result == 0) {
-            $this->errors = new Message(
+            $this->errors[] = new Message(
                 $node->getLine(),
                 Report::LOG_LEVEL_ERROR,
                 $node->name,
@@ -38,6 +38,11 @@ class RegexCheck implements CheckInterface
             return false;
         }
         return true;
+    }
+
+    public function modification(Node $node)
+    {
+        return false;
     }
 
     public function getErrors()

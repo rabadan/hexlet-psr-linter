@@ -9,16 +9,13 @@ use PhpParser\ParserFactory;
 
 class SideEffectsCheckTest extends \PHPUnit_Framework_TestCase
 {
-    private $parser;
-    private $traverser;
-    private $check;
-
     public function testSideEffectsGood()
     {
+        $modifyData = false;
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         $traverser = new NodeTraverser;
         $check = new SideEffectsCheck();
-        $visitor = new NodeVisitor([$check], false);
+        $visitor = new NodeVisitor([$check], $modifyData);
         $traverser->addVisitor($visitor);
 
         $codeSideEffectsGood = file_get_contents(__DIR__ . "/../fixtures/good/noSideEffects.php");
@@ -28,7 +25,7 @@ class SideEffectsCheckTest extends \PHPUnit_Framework_TestCase
 
         $traverser->removeVisitor($visitor);
         $check = new SideEffectsCheck();
-        $visitor = new NodeVisitor([$check], false);
+        $visitor = new NodeVisitor([$check], $modifyData);
         $traverser->addVisitor($visitor);
         $codeSideEffectsGood = file_get_contents(__DIR__ . "/../fixtures/good/TestClass.php");
         $stmts = $parser->parse($codeSideEffectsGood);
@@ -38,10 +35,11 @@ class SideEffectsCheckTest extends \PHPUnit_Framework_TestCase
 
     public function testSideEffectsBad()
     {
+        $modifyData = false;
         $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
         $traverser = new NodeTraverser;
         $check = new SideEffectsCheck();
-        $visitor = new NodeVisitor([$check], false);
+        $visitor = new NodeVisitor([$check], $modifyData);
         $traverser->addVisitor($visitor);
 
         $codeSideEffectsGood = file_get_contents(__DIR__ . "/../fixtures/bad/sideEffects.php");

@@ -32,26 +32,13 @@ class VariableCheck implements CheckInterface
         return $node->getType() === $this->nodeType;
     }
 
-    public function validate(Node $node, $changeable)
+    public function validate(Node $node)
     {
         $result = preg_match_all("/{$this->regex}/", $node->name);
         if ($result == 0) {
-            $isFix = preg_match_all("/^[a-z]+([a-z1-9]+)+(_[a-z1-9]+)+$/", $node->name);
-            if ($changeable && $isFix) {
-                $newName = $this->correctionVariableName($node->name);
-                $this->errors = new Message(
-                    $node->getLine(),
-                    Report::LOG_LEVEL_FIXED,
-                    "{$node->name} => {$newName}",
-                    $this->commentFix
-                );
-                $node->name = $newName;
-                return false;
-            }
-
-            $this->errors = new Message(
+            $this->errors[] = new Message(
                 $node->getLine(),
-                $isFix ? Report::LOG_LEVEL_WARNING : Report::LOG_LEVEL_ERROR,
+                Report::LOG_LEVEL_ERROR,
                 $node->name,
                 $this->comment
             );
@@ -60,6 +47,29 @@ class VariableCheck implements CheckInterface
         }
         return true;
     }
+
+
+    public function modification(Node $node) : bool
+    {
+        if ($this->shouldBeFixed($node->name)) {
+            $newNodeName = $this->correctionVariableName($node->name);
+            $this->errors[] = new Message(
+                $node->getLine(),
+                Report::LOG_LEVEL_INFO,
+                "{$node->name} => {$newNodeName}",
+                $this->commentFix
+            );
+            $node->name = $newNodeName;
+            return true;
+        }
+        return false;
+    }
+
+    private function shouldBeFixed($name)
+    {
+        return preg_match_all("/^[a-z]+([a-z1-9]+)+(_[a-z1-9]+)+$/", $name) > 0;
+    }
+
 
     public function correctionVariableName($name)
     {

@@ -14,11 +14,13 @@ class NodeVisitor extends NodeVisitorAbstract
 {
     private $errors = [];
     private $checks = [];
-    private $changeable;
+    private $dataHaveChanged;
+    private $modifyData;
 
-    public function __construct($checks, $changeable)
+    public function __construct($checks, $modifyData)
     {
-        $this->changeable = $changeable;
+        $this->modifyData = $modifyData;
+        $this->dataHaveChanged = false;
         foreach ($checks as $check) {
             $this->registerCheck($check);
         }
@@ -37,8 +39,10 @@ class NodeVisitor extends NodeVisitorAbstract
     {
         foreach ($this->checks as $check) {
             if ($check->isAcceptable($node)) {
-                if (!$check->validate($node, $this->changeable)) {
-                    $this->errors[] = $check->getErrors();
+                $passed = $check->validate($node);
+
+                if (!$passed && $this->modifyData) {
+                    $this->dataHaveChanged = $check->modification($node) || $this->dataHaveChanged;
                 };
             }
         }
@@ -46,6 +50,18 @@ class NodeVisitor extends NodeVisitorAbstract
 
     public function getErrors()
     {
-        return $this->errors;
+        $allErrorsCheck = [];
+        foreach ($this->checks as $check) {
+            $errorsCheck = $check->getErrors();
+            if (!empty($errorsCheck)) {
+                $allErrorsCheck = array_merge($allErrorsCheck, $errorsCheck);
+            }
+        }
+        return $allErrorsCheck;
+    }
+
+    public function isDataHaveChanged()
+    {
+        return $this->dataHaveChanged;
     }
 }

@@ -4,9 +4,9 @@ namespace HexletPsrLinter\Checks;
 
 use PhpParser\Node;
 
-class FixVariableCheckTest extends \PHPUnit_Framework_TestCase
+class VariableCheckTest extends \PHPUnit_Framework_TestCase
 {
-    public function testFixVariableCheckGood()
+    public function testVariableCheckGood()
     {
         $validData = [
             'camel_case'        => 'camelCase',
@@ -17,13 +17,14 @@ class FixVariableCheckTest extends \PHPUnit_Framework_TestCase
         foreach ($validData as $val => $fixVal) {
             $chekFix = new VariableCheck();
             $data = new Node\Expr\Variable($val);
-            $this->assertFalse($chekFix->validate($data, true));
+            $this->assertFalse($chekFix->validate($data));
+            $chekFix->modification($data);
             $this->assertEquals($data->name, $fixVal);
             $this->assertNotEquals($chekFix->getErrors(), []);
 
             $chekNoFix = new VariableCheck();
             $data = new Node\Expr\Variable($val);
-            $this->assertFalse($chekNoFix->validate($data, false));
+            $this->assertFalse($chekNoFix->validate($data));
             $this->assertNotEquals($data->name, $fixVal);
             $this->assertNotEquals($chekNoFix->getErrors(), []);
         }
@@ -42,7 +43,7 @@ class FixVariableCheckTest extends \PHPUnit_Framework_TestCase
 
         foreach ($invalidData as $val) {
             $chekNoFix = new VariableCheck();
-            $this->assertFalse($chekNoFix->validate(new Node\Expr\Variable($val), false));
+            $this->assertFalse($chekNoFix->validate(new Node\Expr\Variable($val)));
             $this->assertNotEquals($chekNoFix->getErrors(), []);
         }
     }
