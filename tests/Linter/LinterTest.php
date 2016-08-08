@@ -11,7 +11,7 @@ class LinterTest extends \PHPUnit_Framework_TestCase
         $linter = makeLinter();
         $codeGood = file_get_contents(__DIR__ . "/../fixtures/good/good.php");
         $result = $linter($codeGood, []);
-        $this->assertEquals($result['errors'], []);
+        $this->assertEquals($result['result'], []);
     }
 
     public function testLinterLintBad()
@@ -19,6 +19,6 @@ class LinterTest extends \PHPUnit_Framework_TestCase
         $linter = makeLinter();
         $codeBad = file_get_contents(__DIR__ . "/../fixtures/bad/bad.php");
         $result = $linter($codeBad, []);
-        $this->assertNotEquals($result['errors'], []);
+        $this->assertNotEquals($result['result'], []);
     }
 }

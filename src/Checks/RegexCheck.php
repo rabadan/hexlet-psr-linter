@@ -29,12 +29,12 @@ class RegexCheck extends AbstractCheck implements CheckInterface
     {
         $result = preg_match_all("/{$this->regex}/", $node->name);
         if ($result == 0) {
-            $this->errors[] = new Message(
-                $node->getLine(),
-                Report::LOG_LEVEL_ERROR,
-                $node->name,
-                $this->comment
-            );
+            $this->errors[] = [
+                'line'      => $node->getLine(),
+                'logLevel'  => Report::LOG_LEVEL_ERROR,
+                'name'      => $node->name,
+                'message'   => $this->comment
+            ];
             return false;
         }
         return true;

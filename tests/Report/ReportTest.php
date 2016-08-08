@@ -10,7 +10,12 @@ class ReportTest extends \PHPUnit_Framework_TestCase
 
     public function setUp()
     {
-        $this->message = new Message(1, Report::LOG_LEVEL_ERROR, 'test', 'message');
+        $this->message = [
+            'line'      => 1,
+            'logLevel'  => Report::LOG_LEVEL_ERROR,
+            'name'      => 'test',
+            'message'   => 'message'
+        ];
     }
 
     public function testEmpty()
@@ -30,27 +35,27 @@ class ReportTest extends \PHPUnit_Framework_TestCase
 
     public function testReportTxt()
     {
-        $report = new Report([], 'txt');
+        $report = new Report([]);
         $report->addLog('test.php', $this->message);
         $val = "file: test.php" .
             PHP_EOL .
             "1    error     test                     message                                                     " .
-            PHP_EOL;
-        $this->assertEquals($val, $report->printFormat());
+            PHP_EOL . PHP_EOL;
+        $this->assertEquals($val, $report->getReport());
     }
 
     public function testReportYaml()
     {
-        $report = new Report([], 'yml');
+        $report = new Report([]);
         $report->addLog('test.php', $this->message);
         $yaml = new Yaml();
-        $this->assertEquals($yaml->dump($report->getLogs()), $report->printFormat());
+        $this->assertEquals($yaml->dump($report->getLogs()), $report->getReport('yml'));
     }
 
     public function testReportJson()
     {
-        $report = new Report([], 'json');
+        $report = new Report([]);
         $report->addLog('test.php', $this->message);
-        $this->assertEquals(json_encode($report->getLogs()), $report->printFormat());
+        $this->assertEquals(json_encode($report->getLogs()), $report->getReport('json'));
     }
 }

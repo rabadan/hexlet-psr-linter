@@ -6,9 +6,11 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use Commando\Command;
 use HexletPsrLinter\Report\Report;
+use HexletPsrLinter\Exceptions\SaveFileException;
 use function HexletPsrLinter\makeLinter;
 use function HexletPsrLinter\fileLinter;
 use function HexletPsrLinter\printCli;
+use function HexletPsrLinter\writeFileContent;
 
 $cmd = new Command();
 $cmd->option()
@@ -16,17 +18,28 @@ $cmd->option()
     ->require()
     ->describedAs('File path');
 
+$cmd->option('fix')
+    ->description('Auto fix names (my_var_name -> myVarName)')
+    ->boolean();
+
 $cmd->option('format')
     ->aka('f')
-    ->description('Report file format [options: txt, json, yml] [default: txt]')
+    ->description('Report output format [options: txt, json, yml] [default: txt]')
     ->must(function ($format) {
         return in_array($format, ['txt', 'json', 'yml']);
     })
     ->default('txt');
 
-$cmd->option('fix')
-    ->description('Auto fix names (my_var_name -> MyVarName)')
-    ->boolean();
+$cmd->option('s')
+    ->aka('save')
+    ->description('Save report to file')
+    ->boolean()
+    ->default(false);
+
+$cmd->option('o')
+    ->aka('output')
+    ->description('Report file path [default: lint_report]')
+    ->default('lint_report');
 
 $exitCode = 0;
 
@@ -35,13 +48,25 @@ $resultLint = fileLinter(makeLinter(), [
     'fix'  => $cmd['fix']
 ]);
 
-//eval(\Psy\sh());
-
-$report = new Report($resultLint, $cmd['format']);
+$report = new Report($resultLint);
 
 if (!$report->isEmpty()) {
+    if ($cmd['save']) {
+        $reportSaveFilePath = "{$cmd['output']}.{$cmd['format']}";
+        try {
+            writeFileContent($reportSaveFilePath, $report->getReport($cmd['format']));
+            echo "Report saved in this path: '{$reportSaveFilePath}' \n";
+        } catch (SaveFileException $e) {
+            echo "Error save file(path: '{$reportSaveFilePath}'): {$e->getMessage()} \n";
+        }
+    } else {
+        if ($cmd['format'] == 'txt') {
+            printCli($report->getLogs());
+        } else {
+            echo $report->getReport($cmd['format']);
+        }
+    }
     $exitCode = 1;
-    printCli($report->getLogs());
 }
 
 exit($exitCode);

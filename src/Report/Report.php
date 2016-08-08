@@ -13,7 +13,6 @@ class Report
     const LOG_LEVEL_INFO = 'info';
 
     private $logs;
-    private $formatReport;
     private $reportClass = [
         'txt'  => ReportTxt::class,
         'yml'  => ReportYaml::class,
@@ -24,12 +23,8 @@ class Report
     /**
      * Report constructor.
      */
-    public function __construct($logs, $format = 'txt')
+    public function __construct($logs)
     {
-        if (!array_key_exists($format, $this->reportClass)) {
-            $format = 'txt';
-        }
-        $this->formatReport = new $this->reportClass[$format];
         $this->logs = [];
         $this->loadReport($logs);
     }
@@ -68,8 +63,13 @@ class Report
         return empty($this->logs);
     }
 
-    public function printFormat()
+    public function getReport($format = 'txt')
     {
-        return $this->formatReport->createReport($this->getLogs());
+        if (!array_key_exists($format, $this->reportClass)) {
+            $format = 'txt';
+        }
+        $formatReport = new $this->reportClass[$format];
+
+        return $formatReport->createReport($this->getLogs());
     }
 }

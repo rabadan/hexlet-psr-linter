@@ -42,10 +42,15 @@ function makeLinter()
                 $codeFile = "<?php\n{$prettyPrinter->prettyPrint($stmts)}\n";
             }
         } catch (\PhpParser\Error $e) {
-            $resultLint[]= new Message(0, Report::LOG_LEVEL_ERROR, "(Parse Error)", $e->getMessage());
+            $resultLint[] = [
+                'line'      => 0,
+                'logLevel'  => Report::LOG_LEVEL_ERROR,
+                'name'      => "(Parse Error)",
+                'message'   => $e->getMessage()
+            ];
         }
         finally {
-            return ["errors" => $resultLint, "codeFile" => $codeFile];
+            return ["result" => $resultLint, "codeFile" => $codeFile];
         }
     };
 }
@@ -65,16 +70,16 @@ function fileLinter($linter, $params)
             try {
                 writeFileContent($file, $resultLint['codeFile']);
             } catch (SaveFileException $e) {
-                $resultLint['errors'][$file][] = new Message(
-                    0,
-                    Report::LOG_LEVEL_ERROR,
-                    "(Save fix file error)",
-                    $e->getMessage()
-                );
+                $resultLint['result'][$file][] = [
+                    'line'      => 0,
+                    'logLevel'  => Report::LOG_LEVEL_ERROR,
+                    'name'      => "(Save fix file error)",
+                    'message'   => $e->getMessage()
+                ];
             }
         }
 
-        return [$file => $resultLint['errors']];
+        return [$file => $resultLint['result']];
     }, $files);
 
     return $resultPathLint;
