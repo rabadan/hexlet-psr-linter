@@ -6,7 +6,7 @@ use HexletPsrLinter\Report\Message;
 use HexletPsrLinter\Report\Report;
 use PhpParser\Node;
 
-class VariableCheck implements CheckInterface
+class VariableCheck extends AbstractCheck
 {
     private $errors = [];
     private $nodeType;

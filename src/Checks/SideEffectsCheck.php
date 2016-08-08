@@ -6,7 +6,7 @@ use HexletPsrLinter\Report\Message;
 use HexletPsrLinter\Report\Report;
 use PhpParser\Node;
 
-class SideEffectsCheck implements CheckInterface
+class SideEffectsCheck extends AbstractCheck
 {
     private $errors = [];
     private $endLineChecks;
@@ -69,11 +69,6 @@ class SideEffectsCheck implements CheckInterface
         }
 
         return true;
-    }
-
-    public function modification(Node $node)
-    {
-        return false;
     }
 
     public function isSideEffects()

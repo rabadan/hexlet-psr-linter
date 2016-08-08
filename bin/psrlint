@@ -6,7 +6,7 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 use Commando\Command;
 use HexletPsrLinter\Report\Report;
-use function HexletPsrLinter\linter;
+use function HexletPsrLinter\makeLinter;
 use function HexletPsrLinter\fileLinter;
 use function HexletPsrLinter\printCli;
 
@@ -30,7 +30,7 @@ $cmd->option('fix')
 
 $exitCode = 0;
 
-$resultLint = fileLinter(linter(), [
+$resultLint = fileLinter(makeLinter(), [
     'path' => $cmd['path'],
     'fix'  => $cmd['fix']
 ]);

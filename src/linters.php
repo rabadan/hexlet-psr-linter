@@ -14,7 +14,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\ParserFactory;
 use HexletPsrLinter\Visitor\NodeVisitor;
 
-function linter()
+function makeLinter()
 {
     return function ($codeFile, $params) {
         $modifyData = isset($params['fix'])?$params['fix']:false;

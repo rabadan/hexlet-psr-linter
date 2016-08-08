@@ -6,7 +6,7 @@ use HexletPsrLinter\Report\Message;
 use HexletPsrLinter\Report\Report;
 use PhpParser\Node;
 
-class RegexCheck implements CheckInterface
+class RegexCheck extends AbstractCheck
 {
     private $errors = [];
     private $nodeType;
@@ -38,11 +38,6 @@ class RegexCheck implements CheckInterface
             return false;
         }
         return true;
-    }
-
-    public function modification(Node $node)
-    {
-        return false;
     }
 
     public function getErrors()

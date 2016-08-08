@@ -3,14 +3,14 @@
 namespace HexletPsrLinter\Linter;
 
 use HexletPsrLinter\Report\Report;
-use function HexletPsrLinter\linter;
+use function HexletPsrLinter\makeLinter;
 use function HexletPsrLinter\fileLinter;
 
 class FileLinterTest extends \PHPUnit_Framework_TestCase
 {
     public function testLinterRunGood()
     {
-        $result = fileLinter(linter(), [
+        $result = fileLinter(makeLinter(), [
             'path' => __DIR__ . "/../fixtures/good"
         ]);
         $report = new Report($result);
@@ -19,7 +19,7 @@ class FileLinterTest extends \PHPUnit_Framework_TestCase
 
     public function testLinterRunBad()
     {
-        $result = fileLinter(linter(), [
+        $result = fileLinter(makeLinter(), [
             'path' => __DIR__ . "/../fixtures/bad/bad.php"
         ]);
         $report = new Report($result);

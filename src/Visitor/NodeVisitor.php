@@ -2,9 +2,8 @@
 
 namespace HexletPsrLinter\Visitor;
 
-use HexletPsrLinter\checks\CheckInterface;
+use HexletPsrLinter\Checks\AbstractCheck;
 use PhpParser\Node;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeVisitorAbstract;
 
 /**
@@ -26,7 +25,7 @@ class NodeVisitor extends NodeVisitorAbstract
         }
     }
 
-    public function registerCheck(CheckInterface $objectCheck)
+    public function registerCheck(AbstractCheck $objectCheck)
     {
         $this->checks[] = $objectCheck;
     }

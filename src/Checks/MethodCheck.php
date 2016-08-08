@@ -6,7 +6,7 @@ use HexletPsrLinter\Report\Message;
 use HexletPsrLinter\Report\Report;
 use PhpParser\Node;
 
-class MethodCheck implements CheckInterface
+class MethodCheck extends AbstractCheck
 {
     private $errors = [];
     private $nodeType;
@@ -54,11 +54,6 @@ class MethodCheck implements CheckInterface
             }
         }
         return true;
-    }
-
-    public function modification(Node $node)
-    {
-        return false;
     }
 
     public function isAcceptable(Node $node)
