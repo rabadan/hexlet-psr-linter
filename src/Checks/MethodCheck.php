@@ -6,7 +6,7 @@ use HexletPsrLinter\Report\Message;
 use HexletPsrLinter\Report\Report;
 use PhpParser\Node;
 
-class MethodCheck extends AbstractCheck
+class MethodCheck extends AbstractCheck implements CheckInterface
 {
     private $errors = [];
     private $nodeType;

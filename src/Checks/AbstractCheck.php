@@ -4,7 +4,7 @@ namespace HexletPsrLinter\Checks;
 
 use PhpParser\Node;
 
-abstract class AbstractCheck
+abstract class AbstractCheck implements CheckInterface
 {
     abstract public function isAcceptable(Node $node);
     abstract public function validate(Node $node);

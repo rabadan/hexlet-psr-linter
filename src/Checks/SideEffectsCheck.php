@@ -6,7 +6,7 @@ use HexletPsrLinter\Report\Message;
 use HexletPsrLinter\Report\Report;
 use PhpParser\Node;
 
-class SideEffectsCheck extends AbstractCheck
+class SideEffectsCheck extends AbstractCheck implements CheckInterface
 {
     private $errors = [];
     private $endLineChecks;
