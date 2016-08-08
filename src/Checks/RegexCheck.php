@@ -6,7 +6,7 @@ use HexletPsrLinter\Report\Message;
 use HexletPsrLinter\Report\Report;
 use PhpParser\Node;
 
-class RegexCheck implements CheckInterface
+class RegexCheck extends AbstractCheck implements CheckInterface
 {
     private $errors = [];
     private $nodeType;
@@ -29,7 +29,7 @@ class RegexCheck implements CheckInterface
     {
         $result = preg_match_all("/{$this->regex}/", $node->name);
         if ($result == 0) {
-            $this->errors = new Message(
+            $this->errors[] = new Message(
                 $node->getLine(),
                 Report::LOG_LEVEL_ERROR,
                 $node->name,

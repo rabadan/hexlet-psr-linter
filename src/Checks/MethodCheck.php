@@ -6,7 +6,7 @@ use HexletPsrLinter\Report\Message;
 use HexletPsrLinter\Report\Report;
 use PhpParser\Node;
 
-class MethodCheck implements CheckInterface
+class MethodCheck extends AbstractCheck implements CheckInterface
 {
     private $errors = [];
     private $nodeType;
@@ -43,7 +43,7 @@ class MethodCheck implements CheckInterface
         if (!in_array($node->name, $this->magicMethod)) {
             $result = preg_match_all("/{$this->regex}/", $node->name);
             if ($result == 0) {
-                $this->errors = new Message(
+                $this->errors[] = new Message(
                     $node->getLine(),
                     Report::LOG_LEVEL_ERROR,
                     $node->name,

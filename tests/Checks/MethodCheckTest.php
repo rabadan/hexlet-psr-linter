@@ -1,6 +1,6 @@
 <?php
 
-namespace HexletPsrLinter;
+namespace HexletPsrLinter\Check;
 
 use HexletPsrLinter\Checks\MethodCheck;
 use PhpParser\Node\Stmt;

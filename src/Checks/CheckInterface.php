@@ -8,5 +8,6 @@ interface CheckInterface
 {
     public function isAcceptable(Node $node);
     public function validate(Node $node);
+    public function modification(Node $node);
     public function getErrors();
 }

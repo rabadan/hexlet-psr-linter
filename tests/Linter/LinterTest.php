@@ -2,21 +2,23 @@
 
 namespace HexletPsrLinter\Linter;
 
-use function HexletPsrLinter\linter;
+use function HexletPsrLinter\makeLinter;
 
 class LinterTest extends \PHPUnit_Framework_TestCase
 {
     public function testLinterLintGood()
     {
-        $linter = linter();
+        $linter = makeLinter();
         $codeGood = file_get_contents(__DIR__ . "/../fixtures/good/good.php");
-        $this->assertEquals($linter($codeGood), []);
+        $result = $linter($codeGood, []);
+        $this->assertEquals($result['errors'], []);
     }
 
     public function testLinterLintBad()
     {
-        $linter = linter();
+        $linter = makeLinter();
         $codeBad = file_get_contents(__DIR__ . "/../fixtures/bad/bad.php");
-        $this->assertNotEquals($linter($codeBad), []);
+        $result = $linter($codeBad, []);
+        $this->assertNotEquals($result['errors'], []);
     }
 }

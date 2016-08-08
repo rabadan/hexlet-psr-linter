@@ -2,9 +2,8 @@
 
 namespace HexletPsrLinter\Visitor;
 
-use HexletPsrLinter\checks\CheckInterface;
+use HexletPsrLinter\Checks\CheckInterface;
 use PhpParser\Node;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeVisitorAbstract;
 
 /**
@@ -14,9 +13,13 @@ class NodeVisitor extends NodeVisitorAbstract
 {
     private $errors = [];
     private $checks = [];
+    private $dataHaveChanged;
+    private $modifyData;
 
-    public function __construct($checks)
+    public function __construct($checks, $modifyData)
     {
+        $this->modifyData = $modifyData;
+        $this->dataHaveChanged = false;
         foreach ($checks as $check) {
             $this->registerCheck($check);
         }
@@ -31,12 +34,14 @@ class NodeVisitor extends NodeVisitorAbstract
      * @param Node $node
      * @return void
      */
-    public function leaveNode(Node $node)
+    public function enterNode(Node $node)
     {
         foreach ($this->checks as $check) {
             if ($check->isAcceptable($node)) {
-                if (!$check->validate($node)) {
-                    $this->errors[] = $check->getErrors();
+                $passed = $check->validate($node);
+
+                if (!$passed && $this->modifyData) {
+                    $this->dataHaveChanged = $check->modification($node) || $this->dataHaveChanged;
                 };
             }
         }
@@ -44,6 +49,18 @@ class NodeVisitor extends NodeVisitorAbstract
 
     public function getErrors()
     {
-        return $this->errors;
+        $allErrorsCheck = [];
+        foreach ($this->checks as $check) {
+            $errorsCheck = $check->getErrors();
+            if (!empty($errorsCheck)) {
+                $allErrorsCheck = array_merge($allErrorsCheck, $errorsCheck);
+            }
+        }
+        return $allErrorsCheck;
+    }
+
+    public function isDataHaveChanged()
+    {
+        return $this->dataHaveChanged;
     }
 }
