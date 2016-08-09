@@ -74,12 +74,12 @@ function printCli($logs)
     
     foreach ($logs as $file => $messages) {
         $cli->lightBlue()->bold()->inline($file)->br();
-        /** @var $message Message */
+        /** @var $message [] */
         foreach ($messages as $message) {
-            $cli->white()->bold()->inline(sprintf('%-5s', $message->getLine()));
+            $cli->white()->bold()->inline(sprintf('%-5s', $message['line']));
 
             $format = '%-10s';
-            $text = $message->getLevel();
+            $text = $message['logLevel'];
             switch ($text) {
                 case Report::LOG_LEVEL_ERROR:
                     $cli->red()->inline(sprintf($format, $text));
@@ -92,8 +92,8 @@ function printCli($logs)
                     break;
             }
 
-            $cli->lightCyan()->bold()->inline(sprintf('%-25s', $message->getName()));
-            $cli->white()->inline($message->getMessage())->br();
+            $cli->lightCyan()->bold()->inline(sprintf('%-25s', $message['name']));
+            $cli->white()->inline($message['message'])->br();
         }
     }
     $cli->br();

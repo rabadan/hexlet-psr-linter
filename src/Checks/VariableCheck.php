@@ -36,12 +36,12 @@ class VariableCheck extends AbstractCheck implements CheckInterface
     {
         $result = preg_match_all("/{$this->regex}/", $node->name);
         if ($result == 0) {
-            $this->errors[] = new Message(
-                $node->getLine(),
-                Report::LOG_LEVEL_ERROR,
-                $node->name,
-                $this->comment
-            );
+            $this->errors[] = [
+                'line'      => $node->getLine(),
+                'logLevel'  => Report::LOG_LEVEL_ERROR,
+                'name'      => $node->name,
+                'message'   => $this->comment
+            ];
 
             return false;
         }
@@ -53,12 +53,12 @@ class VariableCheck extends AbstractCheck implements CheckInterface
     {
         if ($this->shouldBeFixed($node->name)) {
             $newNodeName = $this->correctionVariableName($node->name);
-            $this->errors[] = new Message(
-                $node->getLine(),
-                Report::LOG_LEVEL_INFO,
-                "{$node->name} => {$newNodeName}",
-                $this->commentFix
-            );
+            $this->errors[] = [
+                'line'      => $node->getLine(),
+                'logLevel'  => Report::LOG_LEVEL_INFO,
+                'name'      => "{$node->name} => {$newNodeName}",
+                'message'   => $this->commentFix
+            ];
             $node->name = $newNodeName;
             return true;
         }

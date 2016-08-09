@@ -57,14 +57,14 @@ class SideEffectsCheck extends AbstractCheck implements CheckInterface
         }
 
         if ($this->isSideEffects()) {
-            $this->errors[] = new Message(
-                0,
-                Report::LOG_LEVEL_ERROR,
-                "",
-                PHP_EOL . "A file should declare new symbols (classes, functions, constants, etc.) " . PHP_EOL .
-                "and cause no other side effects, or it should execute logic with side effects, " . PHP_EOL .
-                "but should not do both. "
-            );
+            $this->errors[] = [
+                'line'      => '-',
+                'logLevel'  => Report::LOG_LEVEL_ERROR,
+                'name'      => "(Side effect)",
+                'message'   => PHP_EOL . "A file should declare new symbols (classes, functions, constants, etc.) " .
+                    PHP_EOL . "and cause no other side effects, or it should execute logic with side effects, " .
+                    PHP_EOL . "but should not do both. "
+            ];
             return false;
         }
 

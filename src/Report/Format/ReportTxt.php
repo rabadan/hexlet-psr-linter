@@ -2,12 +2,6 @@
 
 namespace HexletPsrLinter\Report\Format;
 
-use HexletPsrLinter\Report\Message;
-
-/**
- * @property $cli CLImate
-*/
-
 class ReportTxt implements ReportPrintInterface
 {
     /**
@@ -18,7 +12,7 @@ class ReportTxt implements ReportPrintInterface
         $output = '';
         /**
          * @var  $file string
-         * @var  $msg Message
+         * @var  $msg []
          */
         foreach ($logs as $file => $messages) {
             $output .= 'file: ' . $file . PHP_EOL;
@@ -26,12 +20,13 @@ class ReportTxt implements ReportPrintInterface
                 $output .=
                     sprintf(
                         "%-5s%-10s%-25s%-60s",
-                        $msg->getLine(),
-                        $msg->getLevel(),
-                        $msg->getName(),
-                        $msg->getMessage()
+                        $msg['line'],
+                        $msg['logLevel'],
+                        $msg['name'],
+                        $msg['message']
                     ) . PHP_EOL;
             }
+            $output .= PHP_EOL;
         }
 
         return $output;
