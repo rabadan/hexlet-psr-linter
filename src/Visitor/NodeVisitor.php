@@ -11,7 +11,6 @@ use PhpParser\NodeVisitorAbstract;
  */
 class NodeVisitor extends NodeVisitorAbstract
 {
-    private $errors = [];
     private $checks = [];
     private $dataHaveChanged;
     private $modifyData;

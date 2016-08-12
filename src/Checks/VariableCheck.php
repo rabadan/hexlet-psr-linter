@@ -2,7 +2,6 @@
 
 namespace HexletPsrLinter\Checks;
 
-use HexletPsrLinter\Report\Message;
 use HexletPsrLinter\Report\Report;
 use PhpParser\Node;
 

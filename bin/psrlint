@@ -8,6 +8,7 @@ use Commando\Command;
 use HexletPsrLinter\Report\Report;
 use HexletPsrLinter\Exceptions\SaveFileException;
 use function HexletPsrLinter\makeLinter;
+use function HexletPsrLinter\getCheckers;
 use function HexletPsrLinter\fileLinter;
 use function HexletPsrLinter\printCli;
 use function HexletPsrLinter\writeFileContent;
@@ -17,6 +18,10 @@ $cmd->option()
     ->aka('path')
     ->require()
     ->describedAs('File path');
+
+$cmd->option('c')
+    ->aka('checks')
+    ->description('Checks include path');
 
 $cmd->option('fix')
     ->description('Auto fix names (my_var_name -> myVarName)')
@@ -43,9 +48,22 @@ $cmd->option('o')
 
 $exitCode = 0;
 
+$includeChecks = [];
+
+if (!is_null($cmd['checks'])) {
+    $resultGetChecks = getCheckers($cmd['checks']);
+    $correctGetChecks = array_filter($resultGetChecks, function($resultGetCheck) {
+        return $resultGetCheck['status'];
+    });
+    $includeChecks = array_map(function ($checkClassName) {
+        return new $checkClassName['class'];
+    }, $correctGetChecks);
+}
+
 $resultLint = fileLinter(makeLinter(), [
-    'path' => $cmd['path'],
-    'fix'  => $cmd['fix']
+    'path'           => $cmd['path'],
+    'fix'            => $cmd['fix'],
+    'includeChecks'  => $includeChecks
 ]);
 
 $report = new Report($resultLint);

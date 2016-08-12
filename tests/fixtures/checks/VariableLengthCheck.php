@@ -1,23 +1,26 @@
 <?php
 
-namespace HexletPsrLinter\Checks;
+namespace OthersPsrLinter\Checks;
 
+use HexletPsrLinter\Checks\AbstractCheck;
+use HexletPsrLinter\Checks\CheckInterface;
 use HexletPsrLinter\Report\Report;
 use PhpParser\Node;
 
-class RegexCheck extends AbstractCheck implements CheckInterface
+class VariableLengthCheck extends AbstractCheck implements CheckInterface
 {
     private $errors = [];
     private $nodeType;
-    private $regex;
     private $comment;
 
-    public function __construct($nodeType, $regex, $comment = "")
-    {
+    public function __construct(
+        $nodeType = 'Expr_Variable',
+        $comment = "The length of the variable is greater than 10 characters"
+    ) {
         $this->nodeType = $nodeType;
-        $this->regex    = $regex;
         $this->comment  = $comment;
     }
+
 
     public function isAcceptable(Node $node)
     {
@@ -26,14 +29,14 @@ class RegexCheck extends AbstractCheck implements CheckInterface
 
     public function validate(Node $node)
     {
-        $result = preg_match_all("/{$this->regex}/", $node->name);
-        if ($result == 0) {
+        if (mb_strlen($node->name) > 10) {
             $this->errors[] = [
                 'line'      => $node->getLine(),
-                'logLevel'  => Report::LOG_LEVEL_ERROR,
+                'logLevel'  => Report::LOG_LEVEL_INFO,
                 'name'      => $node->name,
                 'message'   => $this->comment
             ];
+
             return false;
         }
         return true;
